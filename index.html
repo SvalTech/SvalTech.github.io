@@ -4,16 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SvalTech - By Shaurya Pratap Singh - Svalordev</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS for the "Unicorn" Look -->
     <style>
+        /* Base styles */
+        html, body {
+            height: 100%;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #111111;
-            background: radial-gradient(ellipse at top, #2b1a2c, #111111);
+            background-color: #0A0A0A; /* Deep, near-black background */
+            color: #E2E8F0; /* Default text color (slate-200) */
+            /* Animated Mesh Gradient Background */
+            background: linear-gradient(300deg, #0f172a, #1a0f1d, #0A0A0A, #1e1b4b);
+            background-size: 400% 400%;
+            animation: gradientShift 25s ease infinite;
         }
+
+        /* Keyframes for the background animation */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Gradient text style */
         .gradient-text {
             background: linear-gradient(90deg, #A855F7, #EC4899);
             -webkit-background-clip: text;
@@ -21,29 +44,120 @@
             background-clip: text;
             text-fill-color: transparent;
         }
+
+        /* The "Unicorn" Card */
         .card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            border-color: #27272a; /* zinc-800 */
+            position: relative; /* Crucial for positioning pseudo-elements */
+            overflow: hidden; /* Clips the glowing effects */
+            border: 1px solid #ffffff1a; /* Subtle border */
+            background: rgba(15, 15, 15, 0.6); /* Dark glassmorphism */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: transform 0.3s ease, 
+                        border-color 0.3s ease, 
+                        box-shadow 0.3s ease;
         }
+
+        /* Mouse-following spotlight effect */
+        .card::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border-radius: inherit;
+            /* The spotlight! 
+              It's a radial gradient positioned by JS-controlled CSS variables. 
+            */
+            background: radial-gradient(
+                circle 300px at var(--mouse-x) var(--mouse-y), 
+                rgba(168, 85, 247, 0.15), /* purple-500 with 15% opacity */
+                transparent 80%
+            );
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1; /* Sits above the background but below content */
+        }
+        
+        .card-content {
+            position: relative;
+            z-index: 2; /* Ensures content is above the spotlight */
+        }
+
+        /* Card hover state */
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            border-color: #a855f7; /* purple-500 */
+            transform: translateY(-8px) scale(1.02); /* Lifts and scales the card */
+            border-color: #a855f7; /* Bright purple border */
+            /* A soft, glowing shadow to match the accent */
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.2), 
+                        0 0 40px rgba(168, 85, 247, 0.1);
+        }
+
+        /* On hover, the spotlight becomes visible */
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        /* Subtle "shine" or "glare" effect on hover */
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.08), /* Faint white shine */
+                transparent
+            );
+            transform: skewX(-25deg);
+            transition: left 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            z-index: 1;
+        }
+
+        .card:hover::after {
+            left: 150%; /* Sweeps the shine across the card */
+        }
+
+        /* Entrance animations for hero content */
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .fade-in-up-delay-1 { animation-delay: 0.2s; }
+        .fade-in-up-delay-2 { animation-delay: 0.4s; }
+        .fade-in-up-delay-3 { animation-delay: 0.6s; }
+        /* .fade-in-up-delay-4 has been removed */
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
-<body class="text-gray-300">
+<body class="antialiased">
 
     <!-- Main Container -->
-    <div class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
+    <div class="min-h-screen w-full flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 overflow-hidden">
         
         <!-- Header/Hero Section -->
-        <header class="w-full max-w-5xl mx-auto text-center mb-12">
-            <h1 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
+        <header class="w-full max-w-5xl mx-auto text-center mb-16">
+            <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight fade-in-up">
                 Welcome to Sval<span class="gradient-text">Tech</span>
             </h1>
-            <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400">
-                Choose a tool to get started with your JEE preparation.
+            <p class="mt-6 max-w-2xl mx-auto text-lg sm:text-xl text-gray-400 fade-in-up fade-in-up-delay-1">
+                Next-generation tools for your JEE preparation.
+                Engineered for success.
             </p>
         </header>
 
@@ -52,43 +166,71 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
 
                 <!-- JEE Dashboard Card -->
-                <a href="https://svaltech.github.io/studylocus/" rel="noopener noreferrer" class="card bg-gray-900/60 backdrop-blur-sm border rounded-2xl p-6 sm:p-8 group">
-                    <div class="flex items-center gap-4">
-                        <div class="bg-purple-600/10 p-3 rounded-lg border border-purple-500/20">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-400"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20V16"/></svg>
+                <a href="https://svaltech.github.io/studylocus/" rel="noopener noreferrer" class="card rounded-2xl p-6 sm:p-8 group fade-in-up fade-in-up-delay-2">
+                    <div class="card-content">
+                        <div class="flex items-center gap-4">
+                            <!-- New Icon: More professional 'Dashboard' SVG -->
+                            <div class="bg-purple-900/20 p-3 rounded-lg border border-purple-500/30">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-400">
+                                    <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                                    <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                                    <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                                    <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                                </svg>
+                            </div>
+                            <h2 class="text-xl font-bold text-white">StudyLocus</h2>
                         </div>
-                        <h2 class="text-xl font-bold text-white">StudyLocus</h2>
-                    </div>
-                    <p class="mt-4 text-gray-400">Your all-in-one hub to monitor progress, set goals, and stay motivated on your path to success. The one JEE planner to rule them all.</p>
-                    <div class="mt-6 flex items-center text-sm font-medium text-purple-400">
-                        <span>Visit Dashboard</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-1 transform group-hover:translate-x-1 transition-transform"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        <p class="mt-4 text-gray-400">
+                            Your all-in-one hub to monitor progress, set goals, and stay motivated. The one JEE planner to rule them all.
+                        </p>
+                        <div class="mt-6 flex items-center text-sm font-medium text-purple-400">
+                            <span>Visit Dashboard</span>
+                            <!-- New Icon: More stylized arrow -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="ml-1.5 transform transition-transform group-hover:translate-x-1.5">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </div>
                     </div>
                 </a>
 
                 <!-- JEE Syllabus Tracker Card -->
-                <a href="https://svaltech.github.io/syllabustracker/" rel="noopener noreferrer" class="card bg-gray-900/60 backdrop-blur-sm border rounded-2xl p-6 sm:p-8 group">
-                     <div class="flex items-center gap-4">
-                        <div class="bg-pink-600/10 p-3 rounded-lg border border-pink-500/20">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-pink-400"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                <a href="https://svaltech.github.io/syllabustracker/" rel="noopener noreferrer" class="card rounded-2xl p-6 sm:p-8 group fade-in-up fade-in-up-delay-3">
+                    <div class="card-content">
+                        <div class="flex items-center gap-4">
+                            <!-- New Icon: More professional 'Checklist' SVG -->
+                            <div class="bg-pink-900/20 p-3 rounded-lg border border-pink-500/30">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-pink-400">
+                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                                    <rect x="8" y="2" width="8" height="4" rx="1"></rect>
+                                    <path d="m9 14 2 2 4-4"></path>
+                                </svg>
+                            </div>
+                            <h2 class="text-xl font-bold text-white">JEE Syllabus Tracker</h2>
                         </div>
-                        <h2 class="text-xl font-bold text-white">JEE Syllabus Tracker</h2>
-                    </div>
-                    <p class="mt-4 text-gray-400">Never lose track of your syllabus again. Systematically cover every topic with our intuitive tracker.</p>
-                     <div class="mt-6 flex items-center text-sm font-medium text-pink-400">
-                        <span>Track Syllabus</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-1 transform group-hover:translate-x-1 transition-transform"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        <p class="mt-4 text-gray-400">
+                            Never lose track of your syllabus again. Systematically cover every topic with our intuitive tracker.
+                        </p>
+                        <div class="mt-6 flex items-center text-sm font-medium text-pink-400">
+                            <span>Track Syllabus</span>
+                            <!-- New Icon: More stylized arrow -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="ml-1.5 transform transition-transform group-hover:translate-x-1.5">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </div>
                     </div>
                 </a>
             </div>
         </main>
 
+        <!-- About Section Removed -->
+
         <!-- Footer Information -->
-        <footer class="w-full max-w-5xl mx-auto text-center mt-20 pt-8 border-t border-gray-800">
+        <footer class="w-full max-w-5xl mx-auto text-center mt-24 pt-8 border-t border-gray-500/20 fade-in-up fade-in-up-delay-3"> <!-- Updated delay class and margin -->
             <p class="text-gray-500 mb-6">More innovative tools coming soon...</p>
             <div class="text-sm text-gray-500">
-                <p>Proudly Open Source</p>
-                <div class="mt-2 flex items-center justify-center gap-4">
+                <div class="flex items-center justify-center gap-4">
                     <a href="https://github.com/SvalTech" target="_blank" rel="noopener noreferrer" class="hover:text-gray-300 transition-colors">
                         SvalTech Organization
                     </a>
@@ -99,8 +241,35 @@
                 </div>
             </div>
         </footer>
-
     </div>
+
+    <!-- 
+      JavaScript for the mouse-following spotlight effect.
+      This script is lightweight and has no dependencies.
+    -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.card');
+
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    // Get the position of the card relative to the viewport
+                    const rect = card.getBoundingClientRect();
+                    
+                    // Calculate the mouse position relative to the card's top-left corner
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    // Set the CSS variables
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+        });
+    </script>
 
 </body>
 </html>
+
+
+
