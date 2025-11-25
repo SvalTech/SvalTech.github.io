@@ -1,275 +1,448 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SvalTech - By Shaurya Pratap Singh - Svalordev</title>
-    <!-- Tailwind CSS CDN -->
+    <meta name="description" content="Engineering success with StudyLocus and Syllabus Tracker.">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Custom CSS for the "Unicorn" Look -->
+    <!-- Configuration & Custom Styles -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#050505',
+                            purple: '#A855F7',
+                            pink: '#EC4899',
+                            blue: '#3B82F6'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        /* Base styles */
-        html, body {
-            height: 100%;
-            overflow-x: hidden; /* Prevent horizontal scroll */
-        }
-
+        /* Base Reset & Scrollbar */
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0A0A0A; /* Deep, near-black background */
-            color: #E2E8F0; /* Default text color (slate-200) */
-            /* Animated Mesh Gradient Background */
-            background: linear-gradient(300deg, #0f172a, #1a0f1d, #0A0A0A, #1e1b4b);
-            background-size: 400% 400%;
-            animation: gradientShift 25s ease infinite;
+            background-color: #050505;
+            color: #E2E8F0;
+            overflow-x: hidden;
         }
 
-        /* Keyframes for the background animation */
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
         }
 
-        /* Gradient text style */
+        /* Canvas Background */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        /* Noise Texture Overlay */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Gradient Text */
         .gradient-text {
-            background: linear-gradient(90deg, #A855F7, #EC4899);
+            background: linear-gradient(135deg, #fff 30%, #A855F7 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-fill-color: transparent;
         }
 
-        /* The "Unicorn" Card */
+        /* Card Styles with 3D Tilt support */
+        .card-container {
+            perspective: 1000px;
+        }
+
         .card {
-            position: relative; /* Crucial for positioning pseudo-elements */
-            overflow: hidden; /* Clips the glowing effects */
-            border: 1px solid #ffffff1a; /* Subtle border */
-            background: rgba(15, 15, 15, 0.6); /* Dark glassmorphism */
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            transition: transform 0.3s ease, 
-                        border-color 0.3s ease, 
-                        box-shadow 0.3s ease;
+            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            transition: transform 0.1s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            transform-style: preserve-3d;
         }
 
-        /* Mouse-following spotlight effect */
+        /* The Glow Spotlight */
         .card::before {
-            content: '';
+            content: "";
             position: absolute;
-            width: 100%;
-            height: 100%;
             top: 0;
             left: 0;
+            right: 0;
+            bottom: 0;
             border-radius: inherit;
-            /* The spotlight! 
-              It's a radial gradient positioned by JS-controlled CSS variables. 
-            */
+            padding: 1px; /* Border width */
             background: radial-gradient(
-                circle 300px at var(--mouse-x) var(--mouse-y), 
-                rgba(168, 85, 247, 0.15), /* purple-500 with 15% opacity */
-                transparent 80%
+                800px circle at var(--mouse-x) var(--mouse-y),
+                rgba(168, 85, 247, 0.4),
+                transparent 40%
             );
+            -webkit-mask: 
+                linear-gradient(#fff 0 0) content-box, 
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: 2;
             opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: 1; /* Sits above the background but below content */
-        }
-        
-        .card-content {
-            position: relative;
-            z-index: 2; /* Ensures content is above the spotlight */
+            transition: opacity 0.5s;
+            pointer-events: none;
         }
 
-        /* Card hover state */
-        .card:hover {
-            transform: translateY(-8px) scale(1.02); /* Lifts and scales the card */
-            border-color: #a855f7; /* Bright purple border */
-            /* A soft, glowing shadow to match the accent */
-            box-shadow: 0 0 20px rgba(168, 85, 247, 0.2), 
-                        0 0 40px rgba(168, 85, 247, 0.1);
+        /* The Inner Spotlight */
+        .card::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(
+                600px circle at var(--mouse-x) var(--mouse-y),
+                rgba(168, 85, 247, 0.06),
+                transparent 40%
+            );
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
         }
 
-        /* On hover, the spotlight becomes visible */
-        .card:hover::before {
+        .card:hover::before,
+        .card:hover::after {
             opacity: 1;
         }
 
-        /* Subtle "shine" or "glare" effect on hover */
-        .card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -150%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.08), /* Faint white shine */
-                transparent
-            );
-            transform: skewX(-25deg);
-            transition: left 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-            z-index: 1;
+        .card:hover {
+            border-color: rgba(168, 85, 247, 0.3);
+            box-shadow: 
+                0 0 30px -10px rgba(168, 85, 247, 0.2),
+                0 0 10px -5px rgba(236, 72, 153, 0.1);
         }
 
-        .card:hover::after {
-            left: 150%; /* Sweeps the shine across the card */
-        }
-
-        /* Entrance animations for hero content */
-        .fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
-            opacity: 0;
+        .card-content {
+            transform: translateZ(20px); /* Lifts content off card surface */
         }
         
-        .fade-in-up-delay-1 { animation-delay: 0.2s; }
-        .fade-in-up-delay-2 { animation-delay: 0.4s; }
-        .fade-in-up-delay-3 { animation-delay: 0.6s; }
-        /* .fade-in-up-delay-4 has been removed */
+        /* Entrance Animations */
+        .fade-in { opacity: 0; animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body class="antialiased">
+<body class="selection:bg-brand-purple selection:text-white">
+
+    <!-- Canvas Background -->
+    <canvas id="bg-canvas"></canvas>
+    
+    <!-- Noise Overlay for Texture -->
+    <div class="noise-overlay"></div>
 
     <!-- Main Container -->
-    <div class="min-h-screen w-full flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 overflow-hidden">
+    <div class="relative min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 z-10">
         
-        <!-- Header/Hero Section -->
-        <header class="w-full max-w-5xl mx-auto text-center mb-16">
-            <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight fade-in-up">
-                Welcome to Sval<span class="gradient-text">Tech</span>
+        <!-- Header -->
+        <header class="w-full max-w-5xl mx-auto text-center mb-16 relative">
+            
+
+            <h1 class="text-5xl sm:text-7xl font-bold tracking-tight mb-6 fade-in delay-100">
+                Welcome to <span class="gradient-text">sval.tech</span>
             </h1>
-            <p class="mt-6 max-w-2xl mx-auto text-lg sm:text-xl text-gray-400 fade-in-up fade-in-up-delay-1">
-                Next-generation tools for your JEE preparation.
-                Engineered for success.
+            
+            <p class="max-w-2xl mx-auto text-lg sm:text-xl text-gray-400 leading-relaxed fade-in delay-200">
+                Precision-engineered tools for your JEE journey. 
+                <span class="text-gray-300">Track, Analyze, Succeed.</span>
             </p>
         </header>
 
-        <!-- Tool Cards Section -->
-        <main class="w-full max-w-4xl mx-auto">
+        <!-- Tools Grid -->
+        <main class="w-full max-w-5xl mx-auto mb-20">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
 
-                <!-- JEE Dashboard Card -->
-                <a href="https://svaltech.github.io/studylocus/" rel="noopener noreferrer" class="card rounded-2xl p-6 sm:p-8 group fade-in-up fade-in-up-delay-2">
-                    <div class="card-content">
-                        <div class="flex items-center gap-4">
-                            <!-- New Icon: More professional 'Dashboard' SVG -->
-                            <div class="bg-purple-900/20 p-3 rounded-lg border border-purple-500/30">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-400">
-                                    <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-                                    <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-                                    <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-                                    <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-                                </svg>
+                <!-- StudyLocus Card -->
+                <div class="card-container fade-in delay-300">
+                    <a href="https://svaltech.github.io/studylocus/" target="_blank" class="card block p-8 h-full group">
+                        <div class="card-content flex flex-col h-full">
+                            <div class="flex items-start justify-between mb-6">
+                                <div class="bg-gradient-to-br from-purple-500/20 to-blue-500/10 p-4 rounded-xl border border-purple-500/20 group-hover:border-purple-500/40 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                                        <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                                        <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                                        <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                                    </svg>
+                                </div>
+                                <div class="bg-white/5 rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity -mr-2 -mt-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-purple-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+                                </div>
                             </div>
-                            <h2 class="text-xl font-bold text-white">StudyLocus</h2>
+                            
+                            <h2 class="text-2xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors">StudyLocus</h2>
+                            <p class="text-gray-400 mb-6 flex-grow leading-relaxed">
+                                The ultimate dashboard for student productivity. Manage your tasks, visualize progress, and maintain your academic trajectory in one centralized hub.
+                            </p>
+                            
+                            <div class="flex items-center gap-2 text-sm font-medium text-gray-500 group-hover:text-purple-400 transition-colors">
+                                <span>Launch Dashboard</span>
+                                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                            </div>
                         </div>
-                        <p class="mt-4 text-gray-400">
-                            Your all-in-one hub to monitor progress, set goals, and stay motivated. The one JEE planner to rule them all.
-                        </p>
-                        <div class="mt-6 flex items-center text-sm font-medium text-purple-400">
-                            <span>Visit Dashboard</span>
-                            <!-- New Icon: More stylized arrow -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="ml-1.5 transform transition-transform group-hover:translate-x-1.5">
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                <polyline points="12 5 19 12 12 19"></polyline>
-                            </svg>
-                        </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
 
-                <!-- JEE Syllabus Tracker Card -->
-                <a href="https://svaltech.github.io/syllabustracker/" rel="noopener noreferrer" class="card rounded-2xl p-6 sm:p-8 group fade-in-up fade-in-up-delay-3">
-                    <div class="card-content">
-                        <div class="flex items-center gap-4">
-                            <!-- New Icon: More professional 'Checklist' SVG -->
-                            <div class="bg-pink-900/20 p-3 rounded-lg border border-pink-500/30">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-pink-400">
-                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                                    <rect x="8" y="2" width="8" height="4" rx="1"></rect>
-                                    <path d="m9 14 2 2 4-4"></path>
-                                </svg>
+                <!-- Syllabus Tracker Card -->
+                <div class="card-container fade-in delay-300">
+                    <a href="https://svaltech.github.io/syllabustracker/" target="_blank" class="card block p-8 h-full group">
+                        <div class="card-content flex flex-col h-full">
+                            <div class="flex items-start justify-between mb-6">
+                                <div class="bg-gradient-to-br from-pink-500/20 to-rose-500/10 p-4 rounded-xl border border-pink-500/20 group-hover:border-pink-500/40 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-pink-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M9 11l3 3L22 4"></path>
+                                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                                    </svg>
+                                </div>
+                                <div class="bg-white/5 rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity -mr-2 -mt-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-pink-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+                                </div>
                             </div>
-                            <h2 class="text-xl font-bold text-white">JEE Syllabus Tracker</h2>
+                            
+                            <h2 class="text-2xl font-bold text-white mb-3 group-hover:text-pink-300 transition-colors">Syllabus Tracker</h2>
+                            <p class="text-gray-400 mb-6 flex-grow leading-relaxed">
+                                Don't study blindly. Track every chapter, topic, and sub-topic systematically to ensure 100% coverage before the exam day.
+                            </p>
+                            
+                            <div class="flex items-center gap-2 text-sm font-medium text-gray-500 group-hover:text-pink-400 transition-colors">
+                                <span>Start Tracking</span>
+                                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                            </div>
                         </div>
-                        <p class="mt-4 text-gray-400">
-                            Never lose track of your syllabus again. Systematically cover every topic with our intuitive tracker.
-                        </p>
-                        <div class="mt-6 flex items-center text-sm font-medium text-pink-400">
-                            <span>Track Syllabus</span>
-                            <!-- New Icon: More stylized arrow -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="ml-1.5 transform transition-transform group-hover:translate-x-1.5">
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                <polyline points="12 5 19 12 12 19"></polyline>
-                            </svg>
-                        </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
+
             </div>
         </main>
 
-        <!-- About Section Removed -->
-
-        <!-- Footer Information -->
-        <footer class="w-full max-w-5xl mx-auto text-center mt-24 pt-8 border-t border-gray-500/20 fade-in-up fade-in-up-delay-3"> <!-- Updated delay class and margin -->
-            <p class="text-gray-500 mb-6">More innovative tools coming soon...</p>
-            <div class="text-sm text-gray-500">
-                <div class="flex items-center justify-center gap-4">
-                    <a href="https://github.com/SvalTech" target="_blank" rel="noopener noreferrer" class="hover:text-gray-300 transition-colors">
-                        SvalTech Organization
+        <!-- Footer -->
+        <footer class="w-full max-w-5xl mx-auto text-center border-t border-white/5 pt-8 fade-in delay-300">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-white/20"></span>
+                    <span>&copy; 2025 sval.tech</span>
+                </div>
+                <div class="flex items-center gap-6">
+                    <a href="https://github.com/SvalTech" target="_blank" class="hover:text-white transition-colors flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        Organization
                     </a>
-                    <span>&bull;</span>
-                    <a href="https://github.com/svalordev" target="_blank" rel="noopener noreferrer" class="hover:text-gray-300 transition-colors">
-                        Built by Shaurya Pratap Singh (svalordev)
+                    <a href="https://github.com/svalordev" target="_blank" class="hover:text-white transition-colors flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                        svalordev
                     </a>
                 </div>
             </div>
         </footer>
     </div>
 
-    <!-- 
-      JavaScript for the mouse-following spotlight effect.
-      This script is lightweight and has no dependencies.
-    -->
+    <!-- Interactive Scripts -->
     <script>
+        // --- 1. Canvas Constellation Animation ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+        const particleCount = window.innerWidth < 768 ? 40 : 80; // Performance optimization for mobile
+        const connectionDistance = 150;
+        const mouseDistance = 250;
+
+        let mouse = { x: null, y: null };
+
+        // Handle Resize
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initParticles();
+        }
+
+        // Particle Class
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+                this.color = `rgba(168, 85, 247, ${Math.random() * 0.5 + 0.1})`; // Purple tint
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Bounce off edges
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                // Mouse interaction
+                if (mouse.x != null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < mouseDistance) {
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        const force = (mouseDistance - distance) / mouseDistance;
+                        const directionX = forceDirectionX * force * 0.6;
+                        const directionY = forceDirectionY * force * 0.6;
+                        this.x -= directionX;
+                        this.y -= directionY;
+                    }
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                // Draw Connections
+                for (let j = i; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectionDistance) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(168, 85, 247, ${1 - distance / connectionDistance})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+        window.addEventListener('mouseout', () => {
+            mouse.x = undefined;
+            mouse.y = undefined;
+        });
+
+        // Initialize Canvas
+        resize();
+        animate();
+
+
+        // --- 2. Card Tilt & Spotlight Logic ---
         document.addEventListener('DOMContentLoaded', () => {
             const cards = document.querySelectorAll('.card');
 
             cards.forEach(card => {
                 card.addEventListener('mousemove', (e) => {
-                    // Get the position of the card relative to the viewport
                     const rect = card.getBoundingClientRect();
-                    
-                    // Calculate the mouse position relative to the card's top-left corner
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
 
-                    // Set the CSS variables
+                    // Spotlight variables
                     card.style.setProperty('--mouse-x', `${x}px`);
                     card.style.setProperty('--mouse-y', `${y}px`);
+
+                    // 3D Tilt Logic
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -5; // Max 5deg rotation
+                    const rotateY = ((x - centerX) / centerX) * 5;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    // Reset tilt on leave
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
                 });
             });
         });
     </script>
-
 </body>
 </html>
-
-
-
