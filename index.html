@@ -1,16 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>sval.tech | By Shaurya Pratap Singh | svalordev</title>
-
+    
     <!-- Advanced SEO -->
-    <meta name="description"
-        content="Precision academic tools for JEE Main, Advanced & NEET aspirants. Track syllabus, manage backlogs, and analyze consistency with StudyLocus and Zenith.">
-    <meta name="keywords"
-        content="JEE 2026, NEET 2026, Syllabus Tracker, JEE Advanced, Study Dashboard, Academic Analytics, Shaurya Pratap Singh, sval.tech, Backlog Manager, Productivity, JEE Tracker, JEE Notion, JEE, NEET, JEE Dashboard">
+    <meta name="description" content="Precision academic tools for JEE Main, Advanced & NEET aspirants. Track syllabus, manage backlogs, and analyze consistency with StudyLocus and Zenith.">
+    <meta name="keywords" content="JEE 2026, NEET 2026, Syllabus Tracker, JEE Advanced, Study Dashboard, Academic Analytics, Shaurya Pratap Singh, sval.tech, Backlog Manager, Productivity, JEE Tracker, JEE Notion, JEE, NEET, JEE Dashboard">
     <meta name="author" content="Shaurya Pratap Singh">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://sval.tech/">
@@ -18,536 +15,211 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Icons & Tailwind -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- ChaosPrep Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa',
+                            500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95',
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up-fade': 'slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    },
+                    keyframes: {
+                        slideUpFade: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
-        :root {
-            /* Matte Black / Tactical Palette */
-            --bg-color: #030303;
-            --card-bg: rgba(12, 12, 12, 0.5);
-            /* More transparent for 3D bg visibility */
-            --text-color: #e5e5e5;
-            --subtext-color: #9ca3af;
-            --accent-color: #f97316;
-            /* Tactical Orange */
-            --accent-glow: rgba(249, 115, 22, 0.2);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --card-hover-border: rgba(249, 115, 22, 0.4);
-            --btn-bg: rgba(255, 255, 255, 0.03);
-            --btn-hover: #ffffff;
-            --btn-text-hover: #000000;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            min-height: 100vh;
+            background-color: #09090b; /* Tailwind zinc-950 */
+            color: #f4f4f5; /* Tailwind zinc-100 */
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
-        /* --- 3D BACKGROUND ARCHITECTURE START --- */
-
-        /* Layer 1: Deep Space Glow */
+        /* --- 3D BACKGROUND ARCHITECTURE --- */
         #ambient-glow {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: -4;
-            background: radial-gradient(circle at 50% -20%, rgba(249, 115, 22, 0.05) 0%, var(--bg-color) 60%);
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: -4;
+            background: radial-gradient(circle at 50% -20%, rgba(139, 92, 246, 0.08) 0%, #09090b 60%);
         }
 
-        /* Layer 2: 3D Data Nexus (Canvas) */
         #nexus-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -3;
-            pointer-events: none;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -3; pointer-events: none;
         }
 
-        /* Layer 3: GPU-Accelerated 3D Perspective Grid */
         .grid-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -2;
-            perspective: 600px;
-            overflow: hidden;
-            pointer-events: none;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -2; perspective: 600px; overflow: hidden; pointer-events: none;
         }
 
         .grid-plane {
             position: absolute;
-            width: 200vw;
-            height: 200vh;
-            bottom: -50vh;
-            left: -50vw;
+            width: 200vw; height: 200vh;
+            bottom: -50vh; left: -50vw;
             background-image:
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+                linear-gradient(rgba(139, 92, 246, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 92, 246, 0.05) 1px, transparent 1px);
             background-size: 60px 60px;
             transform-origin: center top;
             transform: rotateX(75deg) translateY(0);
             animation: move3DGrid 15s linear infinite;
-            /* Fades the grid out in the distance to create a horizon */
             mask-image: linear-gradient(to top, black 20%, transparent 70%);
             -webkit-mask-image: linear-gradient(to top, black 20%, transparent 70%);
         }
 
-        /* Hardware accelerated translate3d for smooth mobile performance */
         @keyframes move3DGrid {
-            0% {
-                transform: rotateX(75deg) translate3d(0, 0, 0);
-            }
-
-            100% {
-                transform: rotateX(75deg) translate3d(0, 60px, 0);
-            }
+            0% { transform: rotateX(75deg) translate3d(0, 0, 0); }
+            100% { transform: rotateX(75deg) translate3d(0, 60px, 0); }
         }
 
-        /* --- BACKGROUND ARCHITECTURE END --- */
-
-        .container {
-            width: 100%;
-            max-width: 720px;
-            padding: 80px 24px;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            z-index: 1;
-        }
-
-        header {
-            margin-bottom: 4rem;
-            position: relative;
-            animation: slideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
-        }
-
-        .user-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid rgba(34, 197, 94, 0.2);
-            color: #4ade80;
-            padding: 6px 12px;
-            border-radius: 100px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 0 20px rgba(34, 197, 94, 0.05);
-            backdrop-filter: blur(4px);
-        }
-
-        .pulse-dot {
-            width: 6px;
-            height: 6px;
-            background-color: #4ade80;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #4ade80;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(0.95);
-                box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
-            }
-
-            70% {
-                transform: scale(1);
-                box-shadow: 0 0 0 6px rgba(74, 222, 128, 0);
-            }
-
-            100% {
-                transform: scale(0.95);
-                box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
-            }
-        }
-
-        h1 {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 2.8rem;
-            font-weight: 700;
-            letter-spacing: -0.05em;
-            margin-bottom: 0.2em;
-            background: linear-gradient(135deg, #ffffff 0%, #888 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .tagline {
-            font-size: 1.1rem;
-            color: var(--subtext-color);
-            font-weight: 400;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-        }
-
-        .nav-links a {
-            color: var(--subtext-color);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 1px;
-            bottom: -2px;
-            left: 0;
-            background-color: var(--accent-color);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: #fff;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-        }
-
-        .card-base {
-            opacity: 0;
-            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .card-base:nth-child(1) {
-            animation-delay: 0.1s;
-        }
-
-        .card-base:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .card-base:nth-child(3) {
-            animation-delay: 0.3s;
-        }
-
-        .card-wrapper {
-            position: relative;
-            border-radius: 12px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 28px;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            /* Enhanced Glassmorphism */
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            overflow: hidden;
-            transition: border-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-            transform-style: preserve-3d;
-        }
-
-        .card-wrapper::before {
+        /* --- CARD HOVER GLOW --- */
+        .glass-card::before {
             content: "";
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(600px circle at var(--mouse-x, -500px) var(--mouse-y, -500px),
-                    rgba(249, 115, 22, 0.08),
-                    transparent 40%);
-            z-index: 0;
-            transition: opacity 0.3s;
-            opacity: 0;
-            pointer-events: none;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(600px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(139, 92, 246, 0.12), transparent 40%);
+            z-index: 0; transition: opacity 0.3s; opacity: 0; pointer-events: none;
         }
-
-        .card-base:hover .card-wrapper::before {
-            opacity: 1;
-        }
-
-        a.card-base {
-            text-decoration: none;
-            color: inherit;
-            perspective: 1000px;
-            display: block;
-        }
-
-        div.card-base {
-            perspective: 1000px;
-        }
-
-        a.card-base:hover .card-wrapper {
-            border-color: var(--card-hover-border);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 25px var(--accent-glow);
-        }
-
-        .card-content {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            transform: translateZ(30px);
-            /* 3D pop effect */
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .card-title {
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: #ffffff;
-        }
-
-        .card-arrow {
-            color: var(--subtext-color);
-            font-size: 1.2rem;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        a.card-base:hover .card-arrow {
-            transform: translate(4px, -4px);
-            color: var(--accent-color);
-        }
-
-        .card-desc {
-            font-size: 0.95rem;
-            color: var(--subtext-color);
-            margin-bottom: 24px;
-            flex-grow: 1;
-        }
-
-        .card-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: auto;
-        }
-
-        .action-btn {
-            flex: 1;
-            padding: 12px;
-            background: var(--btn-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-align: center;
-            color: var(--text-color);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .action-btn span {
-            transition: transform 0.3s ease;
-        }
-
-        .action-btn:hover {
-            background: var(--btn-hover);
-            color: var(--btn-text-hover);
-            border-color: var(--btn-hover);
-            transform: translateY(-2px);
-        }
-
-        .action-btn:hover span {
-            transform: translateX(4px);
-        }
-
-        footer {
-            margin-top: 6rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border-color);
-            font-size: 0.85rem;
-            color: var(--subtext-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            opacity: 0;
-            animation: slideUp 0.8s 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .footer-credit {
-            color: var(--text-color);
-            font-weight: 500;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 768px) {
-            .container {
-                padding: 40px 20px;
-            }
-
-            h1 {
-                font-size: 2.2rem;
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-            }
-
-            footer {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
-
-            .card-wrapper {
-                padding: 24px;
-            }
-
-            /* Fade grid a bit more on mobile to ensure text readability */
-            .grid-plane {
-                opacity: 0.7;
-            }
-        }
+        .glass-card:hover::before { opacity: 1; }
+        
+        /* Staggered Animations */
+        .stagger-1 { animation-delay: 100ms; }
+        .stagger-2 { animation-delay: 200ms; }
+        .stagger-3 { animation-delay: 300ms; }
     </style>
 </head>
 
-<body>
+<body class="min-h-screen flex flex-col items-center selection:bg-brand-500/30 selection:text-brand-200">
+
     <!-- 3D Environment Architecture -->
     <div id="ambient-glow"></div>
-    <div class="grid-container">
-        <div class="grid-plane"></div>
-    </div>
+    <div class="grid-container"><div class="grid-plane"></div></div>
     <canvas id="nexus-canvas"></canvas>
 
     <!-- Main Content -->
-    <div class="container">
-        <header>
+    <div class="w-full max-w-5xl px-6 py-16 md:py-24 flex flex-col items-center relative z-10">
+        
+        <!-- Header Section -->
+        <header class="w-full text-center flex flex-col items-center mb-16 animate-slide-up-fade opacity-0">
             
-            <h1>sval.tech</h1>
-            <p class="tagline">Command Your Preparation.</p>
-            <nav class="nav-links">
-                <a href="https://github.com/svalordev" target="_blank" rel="noopener noreferrer">/github</a>
-                <a href="mailto:shaurya.p.singh21@gmail.com">/contact</a>
-                <a href="https://discord.gg/mKXPpSY6Dz" target="_blank" rel="noopener noreferrer">/discord</a>
+
+            <!-- Title -->
+            <h1 class="text-5xl md:text-7xl font-black text-white tracking-tighter mb-4">sval.tech</h1>
+            
+            <!-- Links -->
+            <nav class="flex flex-wrap justify-center gap-3 mt-4">
+                <a href="https://github.com/svalordev" target="_blank" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900/50 border border-zinc-800 hover:border-brand-500/50 hover:bg-zinc-800 text-sm font-bold text-zinc-400 hover:text-white transition-all backdrop-blur-md group">
+                    <i data-lucide="github" class="w-4 h-4 group-hover:text-brand-400 transition-colors"></i> /github
+                </a>
+                <a href="mailto:shaurya.p.singh21@gmail.com" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900/50 border border-zinc-800 hover:border-brand-500/50 hover:bg-zinc-800 text-sm font-bold text-zinc-400 hover:text-white transition-all backdrop-blur-md group">
+                    <i data-lucide="mail" class="w-4 h-4 group-hover:text-brand-400 transition-colors"></i> /contact
+                </a>
+                <a href="https://discord.gg/mKXPpSY6Dz" target="_blank" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900/50 border border-zinc-800 hover:border-brand-500/50 hover:bg-zinc-800 text-sm font-bold text-zinc-400 hover:text-white transition-all backdrop-blur-md group">
+                    <i data-lucide="message-square" class="w-4 h-4 group-hover:text-brand-400 transition-colors"></i> /discord
+                </a>
             </nav>
         </header>
 
-        <main class="grid">
-            <a href="https://sval.tech/chaos" target="_blank" rel="noopener noreferrer" class="card-base tilt-card">
-                <div class="card-wrapper">
-                    <div class="card-content">
-                        <div class="card-header">
-                            <span class="card-title">ChaosPrep</span>
-                            <span class="card-arrow">&nearr;</span>
-                        </div>
-                        <p class="card-desc">Master your daily chaos. Day/Week wise task tracking in a calendar grid + Optimised for Mobile</p>
-                    </div>
-                </div>
-            </a>
+        <!-- Projects Grid -->
+        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
             
-            <a href="https://sval.tech/studylocus/" target="_blank" rel="noopener noreferrer"
-                class="card-base tilt-card">
-                <div class="card-wrapper">
-                    <div class="card-content">
-                        <div class="card-header">
-                            <span class="card-title">StudyLocus</span>
-                            <span class="card-arrow">&nearr;</span>
-                        </div>
-                        <p class="card-desc">A functional, aesthetic dashboard for complete preparation management.</p>
+            <!-- ChaosPrep Card -->
+            <a href="https://sval.tech/chaos" target="_blank" rel="noopener noreferrer" class="glass-card stagger-1 opacity-0 animate-slide-up-fade group relative p-6 md:p-8 rounded-[2rem] bg-[#18181b]/70 backdrop-blur-xl border border-zinc-800/80 hover:border-brand-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(139,92,246,0.15)] flex flex-col gap-5 overflow-hidden">
+                <div class="flex justify-between items-start relative z-10">
+                    <div class="w-12 h-12 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center text-zinc-400 group-hover:bg-brand-500/20 group-hover:text-brand-400 group-hover:border-brand-500/30 transition-all">
+                        <i data-lucide="calendar-days" class="w-6 h-6"></i>
                     </div>
+                    <i data-lucide="arrow-up-right" class="w-5 h-5 text-zinc-600 group-hover:text-brand-400 transition-colors"></i>
+                </div>
+                <div class="relative z-10 flex-grow">
+                    <h2 class="text-xl font-black text-white tracking-tight mb-2">ChaosPrep</h2>
+                    <p class="text-sm font-medium text-zinc-400 leading-relaxed">Master your daily chaos. Day/Week wise task tracking in a calendar grid. Optimized for Focus.</p>
                 </div>
             </a>
 
-            <div class="card-base tilt-card">
-                <div class="card-wrapper">
-                    <div class="card-content">
-                        <div class="card-header">
-                            <span class="card-title">Syllabus Tracker</span>
-                        </div>
-                        <p class="card-desc">Chapter + topic wise tracking. Best website for syllabus tracking + readiness score.</p>
-                        <div class="card-actions">
-                            <a href="https://sval.tech/syllabustracker/" target="_blank" rel="noopener noreferrer"
-                                class="action-btn">JEE <span>&rarr;</span></a>
-                            <a href="https://sval.tech/neet/" target="_blank" rel="noopener noreferrer"
-                                class="action-btn">NEET <span>&rarr;</span></a>
-                        </div>
+            <!-- StudyLocus Card -->
+            <a href="https://sval.tech/studylocus/" target="_blank" rel="noopener noreferrer" class="glass-card stagger-2 opacity-0 animate-slide-up-fade group relative p-6 md:p-8 rounded-[2rem] bg-[#18181b]/70 backdrop-blur-xl border border-zinc-800/80 hover:border-brand-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(139,92,246,0.15)] flex flex-col gap-5 overflow-hidden">
+                <div class="flex justify-between items-start relative z-10">
+                    <div class="w-12 h-12 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center text-zinc-400 group-hover:bg-brand-500/20 group-hover:text-brand-400 group-hover:border-brand-500/30 transition-all">
+                        <i data-lucide="target" class="w-6 h-6"></i>
                     </div>
+                    <i data-lucide="arrow-up-right" class="w-5 h-5 text-zinc-600 group-hover:text-brand-400 transition-colors"></i>
+                </div>
+                <div class="relative z-10 flex-grow">
+                    <h2 class="text-xl font-black text-white tracking-tight mb-2">StudyLocus</h2>
+                    <p class="text-sm font-medium text-zinc-400 leading-relaxed">A functional, highly aesthetic dashboard for complete preparation management & analytics.</p>
+                </div>
+            </a>
+
+            <!-- Syllabus Tracker Container -->
+            <div class="glass-card stagger-3 opacity-0 animate-slide-up-fade relative p-6 md:p-8 rounded-[2rem] bg-[#18181b]/70 backdrop-blur-xl border border-zinc-800/80 flex flex-col gap-5 overflow-hidden group">
+                <div class="flex justify-between items-start relative z-10">
+                    <div class="w-12 h-12 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center text-zinc-400 transition-all">
+                        <i data-lucide="book-open" class="w-6 h-6"></i>
+                    </div>
+                </div>
+                <div class="relative z-10 flex-grow">
+                    <h2 class="text-xl font-black text-white tracking-tight mb-2">Syllabus Tracker</h2>
+                    <p class="text-sm font-medium text-zinc-400 leading-relaxed">Chapter & topic wise tracking. The ultimate tool for syllabus mastery and readiness scores.</p>
+                </div>
+                <!-- Action Buttons -->
+                <div class="relative z-10 flex gap-3 mt-2">
+                    <a href="https://sval.tech/syllabustracker/" target="_blank" class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-zinc-800 border border-zinc-700 hover:bg-brand-600 hover:border-brand-500 text-white font-bold text-sm transition-all shadow-sm hover:shadow-[0_0_15px_rgba(139,92,246,0.3)] active:scale-95">
+                        JEE <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </a>
+                    <a href="https://sval.tech/neet/" target="_blank" class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-zinc-800 border border-zinc-700 hover:bg-emerald-600 hover:border-emerald-500 text-white font-bold text-sm transition-all shadow-sm hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] active:scale-95">
+                        NEET <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </a>
                 </div>
             </div>
+
         </main>
 
-        <footer>
+        <!-- Footer -->
+        <footer class="mt-24 pt-8 w-full border-t border-zinc-800/50 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold uppercase tracking-widest text-zinc-500 opacity-0 animate-slide-up-fade stagger-3">
             <span>&copy; 2026 sval.tech</span>
-            <span class="footer-credit">By Shaurya Pratap Singh (svalordev) u/DarthAcademius</span>
+            <div class="flex items-center gap-2">
+                <i data-lucide="code-2" class="w-4 h-4 text-brand-500"></i>
+                <span class="text-zinc-400">By Shaurya Pratap Singh</span>
+            </div>
         </footer>
     </div>
 
+    <!-- Scripts -->
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script>
-        // --- 1. MOUSE GLOW & TILT EFFECTS ---
-        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+        // Initialize Icons
+        lucide.createIcons();
 
-        document.querySelectorAll('.card-wrapper').forEach(card => {
+        // --- MOUSE GLOW EFFECT (ChaosPrep Style) ---
+        document.querySelectorAll('.glass-card').forEach(card => {
             card.addEventListener('mousemove', e => {
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
@@ -557,47 +229,20 @@
             });
         });
 
-        if (!isTouchDevice) {
-            document.querySelectorAll('.tilt-card').forEach(wrapper => {
-                const card = wrapper.querySelector('.card-wrapper');
-                wrapper.addEventListener('mousemove', e => {
-                    const rect = wrapper.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    const rotateX = ((y - centerY) / centerY) * -6;
-                    const rotateY = ((x - centerX) / centerX) * 6;
-                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-                });
-
-                wrapper.addEventListener('mouseleave', () => {
-                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-                    card.style.transition = 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)';
-                });
-
-                wrapper.addEventListener('mouseenter', () => {
-                    card.style.transition = 'none';
-                });
-            });
-        }
-
-        // --- 2. HIGH-PERFORMANCE 3D CANVAS NEXUS ---
+        // --- HIGH-PERFORMANCE 3D CANVAS NEXUS (Re-themed to Brand Purple) ---
         const canvas = document.getElementById('nexus-canvas');
         const ctx = canvas.getContext('2d');
-
+        
         let width, height;
         let particles = [];
-
-        // Optimize particle count based on device (Mobile = fewer particles = no lag)
+        
+        // Optimize for mobile vs desktop
         const isMobile = window.innerWidth < 768;
-        const particleCount = isMobile ? 35 : 80;
+        const particleCount = isMobile ? 30 : 70;
         const connectionDistance = isMobile ? 100 : 150;
-
+        
         // 3D Camera settings
         const fov = 250;
-        let angleX = 0;
-        let angleY = 0;
 
         function resize() {
             width = window.innerWidth;
@@ -605,7 +250,6 @@
             canvas.width = width;
             canvas.height = height;
         }
-
         window.addEventListener('resize', resize);
         resize();
 
@@ -618,8 +262,7 @@
             }
 
             update() {
-                // Slowly move particles towards camera
-                this.z -= 0.5;
+                this.z -= 0.5; // Drift towards camera
                 if (this.z < -fov) {
                     this.z = width;
                     this.x = (Math.random() - 0.5) * width * 2;
@@ -628,63 +271,54 @@
             }
 
             draw() {
-                // 3D to 2D Projection Math
                 const scale = fov / (fov + this.z);
                 const x2d = (this.x * scale) + (width / 2);
-                const y2d = (this.y * scale) + (height / 2) - 100; // Offset up slightly
+                const y2d = (this.y * scale) + (height / 2) - 100;
 
-                // Only draw if visible on screen
                 if (x2d >= 0 && x2d <= width && y2d >= 0 && y2d <= height) {
                     ctx.beginPath();
                     ctx.arc(x2d, y2d, this.baseSize * scale * 2, 0, Math.PI * 2);
-                    // Orange glow for nodes
-                    ctx.fillStyle = `rgba(249, 115, 22, ${scale})`;
+                    // ChaosPrep Brand Color Node (Purple)
+                    ctx.fillStyle = `rgba(139, 92, 246, ${scale * 1.5})`;
                     ctx.fill();
                 }
-
                 return { x: x2d, y: y2d, scale: scale };
             }
         }
 
-        // Initialize particles
         for (let i = 0; i < particleCount; i++) {
             particles.push(new Particle());
         }
 
         function animate() {
             ctx.clearRect(0, 0, width, height);
-
             const projected = [];
 
-            // Update & Draw nodes
             particles.forEach(p => {
                 p.update();
                 projected.push(p.draw());
             });
 
-            // Draw connecting lines (The "Nexus" effect)
             for (let i = 0; i < projected.length; i++) {
                 for (let j = i + 1; j < projected.length; j++) {
                     const p1 = projected[i];
                     const p2 = projected[j];
 
-                    // Pre-check boundaries to save math processing
                     if (p1.x < 0 || p1.x > width || p1.y < 0 || p1.y > height) continue;
 
                     const dx = p1.x - p2.x;
                     const dy = p1.y - p2.y;
                     const distSq = dx * dx + dy * dy;
 
-                    // Use squared distance for performance (avoids Math.sqrt)
                     if (distSq < connectionDistance * connectionDistance) {
                         const dist = Math.sqrt(distSq);
-                        const opacity = (1 - dist / connectionDistance) * 0.2; // Max line opacity 0.2
-
+                        const opacity = (1 - dist / connectionDistance) * 0.15;
+                        
                         ctx.beginPath();
                         ctx.moveTo(p1.x, p1.y);
                         ctx.lineTo(p2.x, p2.y);
-                        // Subtle white/grey lines connecting the orange nodes
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+                        // ChaosPrep Brand Color Connections
+                        ctx.strokeStyle = `rgba(139, 92, 246, ${opacity})`;
                         ctx.lineWidth = (p1.scale + p2.scale) * 0.5;
                         ctx.stroke();
                     }
@@ -692,9 +326,7 @@
             }
             requestAnimationFrame(animate);
         }
-
         animate();
     </script>
 </body>
-
 </html>
