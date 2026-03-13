@@ -7,21 +7,19 @@
     
     <!-- Advanced SEO -->
     <meta name="description" content="Precision academic tools for JEE Main, Advanced & NEET aspirants. Track syllabus, manage backlogs, and analyze consistency with StudyLocus and Zenith.">
-    <meta name="keywords" content="JEE 2026, NEET 2026, Syllabus Tracker, JEE Advanced, Study Dashboard, Academic Analytics, Shaurya Pratap Singh, sval.tech, Backlog Manager, Productivity, JEE Tracker, JEE Notion, JEE, NEET, JEE Dashboard">
     <meta name="author" content="Shaurya Pratap Singh">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://sval.tech/">
-
-    <!-- Fonts -->
+    
+    <!-- Fonts: Inter for readability, Space Grotesk for technical/modern headings -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-    <!-- Icons & Tailwind -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons & Frameworks -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-    <!-- ChaosPrep Tailwind Config -->
+    <!-- Tailwind Config -->
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -29,21 +27,26 @@
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
                     },
                     colors: {
-                        brand: {
-                            50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa',
-                            500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95',
+                        quantum: {
+                            bg: '#030305',
+                            card: 'rgba(10, 10, 15, 0.4)',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            violet: '#7c3aed',
+                            cyan: '#06b6d4',
+                            glow: 'rgba(124, 58, 237, 0.5)'
                         }
                     },
                     animation: {
+                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'slide-up-fade': 'slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                     },
                     keyframes: {
-                        slideUpFade: {
-                            '0%': { transform: 'translateY(20px)', opacity: '0' },
-                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
                         }
                     }
                 }
@@ -53,279 +56,353 @@
 
     <style>
         body {
-            background-color: #09090b; /* Tailwind zinc-950 */
-            color: #f4f4f5; /* Tailwind zinc-100 */
+            background-color: #030305;
+            color: #ffffff;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- 3D BACKGROUND ARCHITECTURE --- */
-        #ambient-glow {
+        /* --- 3D CANVAS BACKGROUND --- */
+        #webgl-canvas {
+            position: fixed;
+            top: 0; left: 0; 
+            width: 100vw; height: 100vh;
+            z-index: -2; 
+            pointer-events: none;
+        }
+
+        /* Ambient subtle gradient overlay for depth */
+        .ambient-glow {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none; z-index: -4;
-            background: radial-gradient(circle at 50% -20%, rgba(139, 92, 246, 0.08) 0%, #09090b 60%);
+            background: radial-gradient(circle at 50% 0%, rgba(124, 58, 237, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
         }
 
-        #nexus-canvas {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -3; pointer-events: none;
+        /* --- PREMIUM GLASSMORPHISM CARDS --- */
+        .glass-card {
+            background: var(--quantum-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--quantum-border);
+            border-radius: 24px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
         }
 
-        .grid-container {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -2; perspective: 600px; overflow: hidden; pointer-events: none;
-        }
-
-        .grid-plane {
-            position: absolute;
-            width: 200vw; height: 200vh;
-            bottom: -50vh; left: -50vw;
-            background-image:
-                linear-gradient(rgba(139, 92, 246, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(139, 92, 246, 0.05) 1px, transparent 1px);
-            background-size: 60px 60px;
-            transform-origin: center top;
-            transform: rotateX(75deg) translateY(0);
-            animation: move3DGrid 15s linear infinite;
-            mask-image: linear-gradient(to top, black 20%, transparent 70%);
-            -webkit-mask-image: linear-gradient(to top, black 20%, transparent 70%);
-        }
-
-        @keyframes move3DGrid {
-            0% { transform: rotateX(75deg) translate3d(0, 0, 0); }
-            100% { transform: rotateX(75deg) translate3d(0, 60px, 0); }
-        }
-
-        /* --- CARD HOVER GLOW --- */
+        /* Hover Glow Effect inside card */
         .glass-card::before {
             content: "";
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(600px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(139, 92, 246, 0.12), transparent 40%);
-            z-index: 0; transition: opacity 0.3s; opacity: 0; pointer-events: none;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.06), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            z-index: 1;
         }
+
         .glass-card:hover::before { opacity: 1; }
+
+        /* Animated Gradient Border on Hover */
+        .glass-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.8), rgba(6, 182, 212, 0.8));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
         
+        .glass-card:hover::after { opacity: 1; }
+
+        .glass-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5), 0 0 20px -5px rgba(124, 58, 237, 0.2);
+        }
+
+        /* Inner Content 3D Pop */
+        .card-content {
+            position: relative;
+            z-index: 10;
+            transform: translateZ(30px);
+        }
+
         /* Staggered Animations */
-        .stagger-1 { animation-delay: 100ms; }
-        .stagger-2 { animation-delay: 200ms; }
-        .stagger-3 { animation-delay: 300ms; }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #030305; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #7c3aed; }
     </style>
 </head>
 
-<body class="min-h-screen flex flex-col items-center selection:bg-brand-500/30 selection:text-brand-200">
+<body class="min-h-screen flex flex-col items-center selection:bg-quantum-violet/30 selection:text-white">
 
-    <!-- 3D Environment Architecture -->
-    <div id="ambient-glow"></div>
-    <div class="grid-container"><div class="grid-plane"></div></div>
-    <canvas id="nexus-canvas"></canvas>
+    <!-- 3D Environment -->
+    <canvas id="webgl-canvas"></canvas>
+    <div class="ambient-glow"></div>
 
     <!-- Main Content -->
     <div class="w-full max-w-5xl px-6 py-16 md:py-24 flex flex-col items-center relative z-10">
         
         <!-- Header Section -->
-        <header class="w-full text-center flex flex-col items-center mb-16 animate-slide-up-fade opacity-0">
+        <header class="w-full text-center flex flex-col items-center mb-16 opacity-0 animate-fade-in-up">
             
-
-            <!-- Title -->
-            <h1 class="text-5xl md:text-7xl font-black text-white tracking-tighter mb-4">sval.tech</h1>
+            <h1 class="text-5xl md:text-7xl font-black font-display tracking-tighter mb-4">
+                sval.tech
+            </h1>
             
-            <!-- Links -->
+            <!-- Original Style Links -->
             <nav class="flex flex-wrap justify-center gap-3 mt-4">
-                <a href="https://github.com/svalordev" target="_blank" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900/50 border border-zinc-800 hover:border-brand-500/50 hover:bg-zinc-800 text-sm font-bold text-zinc-400 hover:text-white transition-all backdrop-blur-md group">
-                    <i data-lucide="github" class="w-4 h-4 group-hover:text-brand-400 transition-colors"></i> /github
+                <a href="https://github.com/svalordev" target="_blank" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900/50 border border-zinc-800 hover:border-quantum-violet/50 hover:bg-zinc-800 text-sm font-bold text-zinc-400 hover:text-white transition-all backdrop-blur-md group">
+                    <i data-lucide="github" class="w-4 h-4 group-hover:text-quantum-violet transition-colors"></i> /github
                 </a>
-                <a href="mailto:shaurya.p.singh21@gmail.com" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900/50 border border-zinc-800 hover:border-brand-500/50 hover:bg-zinc-800 text-sm font-bold text-zinc-400 hover:text-white transition-all backdrop-blur-md group">
-                    <i data-lucide="mail" class="w-4 h-4 group-hover:text-brand-400 transition-colors"></i> /contact
+                <a href="/cdn-cgi/l/email-protection" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900/50 border border-zinc-800 hover:border-quantum-cyan/50 hover:bg-zinc-800 text-sm font-bold text-zinc-400 hover:text-white transition-all backdrop-blur-md group">
+                    <i data-lucide="mail" class="w-4 h-4 group-hover:text-quantum-cyan transition-colors"></i> /contact
                 </a>
-                <a href="https://discord.gg/mKXPpSY6Dz" target="_blank" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900/50 border border-zinc-800 hover:border-brand-500/50 hover:bg-zinc-800 text-sm font-bold text-zinc-400 hover:text-white transition-all backdrop-blur-md group">
-                    <i data-lucide="message-square" class="w-4 h-4 group-hover:text-brand-400 transition-colors"></i> /discord
+                <a href="https://discord.gg/mKXPpSY6Dz" target="_blank" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900/50 border border-zinc-800 hover:border-white/50 hover:bg-zinc-800 text-sm font-bold text-zinc-400 hover:text-white transition-all backdrop-blur-md group">
+                    <i data-lucide="message-square" class="w-4 h-4 group-hover:text-white transition-colors"></i> /discord
                 </a>
             </nav>
         </header>
 
-        <!-- Projects Grid -->
-        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+        <!-- Tools Grid -->
+        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full perspective-[2000px]">
             
-            <!-- ChaosPrep Card -->
-            <a href="https://sval.tech/chaos" target="_blank" rel="noopener noreferrer" class="glass-card stagger-1 opacity-0 animate-slide-up-fade group relative p-6 md:p-8 rounded-[2rem] bg-[#18181b]/70 backdrop-blur-xl border border-zinc-800/80 hover:border-brand-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(139,92,246,0.15)] flex flex-col gap-5 overflow-hidden">
-                <div class="flex justify-between items-start relative z-10">
-                    <div class="w-12 h-12 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center text-zinc-400 group-hover:bg-brand-500/20 group-hover:text-brand-400 group-hover:border-brand-500/30 transition-all">
-                        <i data-lucide="calendar-days" class="w-6 h-6"></i>
+            <!-- ChaosPrep -->
+            <a href="https://sval.tech/chaos" target="_blank" class="glass-card tilt-card p-6 md:p-8 group opacity-0 animate-fade-in-up delay-100 decoration-none block">
+                <div class="card-content flex flex-col h-full pointer-events-none">
+                    <div class="flex justify-between items-start mb-5">
+                        <div class="w-12 h-12 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center text-zinc-400 group-hover:bg-quantum-violet/20 group-hover:text-quantum-violet group-hover:border-quantum-violet/30 transition-all duration-300">
+                            <i data-lucide="calendar-days" class="w-6 h-6"></i>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-5 h-5 text-zinc-600 group-hover:text-quantum-violet transition-colors"></i>
                     </div>
-                    <i data-lucide="arrow-up-right" class="w-5 h-5 text-zinc-600 group-hover:text-brand-400 transition-colors"></i>
-                </div>
-                <div class="relative z-10 flex-grow">
                     <h2 class="text-xl font-black text-white tracking-tight mb-2">ChaosPrep</h2>
-                    <p class="text-sm font-medium text-zinc-400 leading-relaxed">Master your daily chaos. Day/Week wise task tracking in a calendar grid. Optimized for Focus.</p>
+                    <p class="text-sm font-medium text-zinc-400 leading-relaxed flex-grow">Master your daily chaos. Day/Week wise task tracking in a calendar grid. Optimized for Focus.</p>
                 </div>
             </a>
 
-            <!-- StudyLocus Card -->
-            <a href="https://sval.tech/studylocus/" target="_blank" rel="noopener noreferrer" class="glass-card stagger-2 opacity-0 animate-slide-up-fade group relative p-6 md:p-8 rounded-[2rem] bg-[#18181b]/70 backdrop-blur-xl border border-zinc-800/80 hover:border-brand-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(139,92,246,0.15)] flex flex-col gap-5 overflow-hidden">
-                <div class="flex justify-between items-start relative z-10">
-                    <div class="w-12 h-12 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center text-zinc-400 group-hover:bg-brand-500/20 group-hover:text-brand-400 group-hover:border-brand-500/30 transition-all">
-                        <i data-lucide="target" class="w-6 h-6"></i>
+            <!-- StudyLocus -->
+            <a href="https://sval.tech/studylocus/" target="_blank" class="glass-card tilt-card p-6 md:p-8 group opacity-0 animate-fade-in-up delay-200 decoration-none block">
+                <div class="card-content flex flex-col h-full pointer-events-none">
+                    <div class="flex justify-between items-start mb-5">
+                        <div class="w-12 h-12 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center text-zinc-400 group-hover:bg-quantum-cyan/20 group-hover:text-quantum-cyan group-hover:border-quantum-cyan/30 transition-all duration-300">
+                            <i data-lucide="target" class="w-6 h-6"></i>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-5 h-5 text-zinc-600 group-hover:text-quantum-cyan transition-colors"></i>
                     </div>
-                    <i data-lucide="arrow-up-right" class="w-5 h-5 text-zinc-600 group-hover:text-brand-400 transition-colors"></i>
-                </div>
-                <div class="relative z-10 flex-grow">
                     <h2 class="text-xl font-black text-white tracking-tight mb-2">StudyLocus</h2>
-                    <p class="text-sm font-medium text-zinc-400 leading-relaxed">A functional, highly aesthetic dashboard for complete preparation management & analytics.</p>
+                    <p class="text-sm font-medium text-zinc-400 leading-relaxed flex-grow">A functional, highly aesthetic dashboard for complete preparation management & analytics.</p>
                 </div>
             </a>
 
-            <!-- Syllabus Tracker Container -->
-            <div class="glass-card stagger-3 opacity-0 animate-slide-up-fade relative p-6 md:p-8 rounded-[2rem] bg-[#18181b]/70 backdrop-blur-xl border border-zinc-800/80 flex flex-col gap-5 overflow-hidden group">
-                <div class="flex justify-between items-start relative z-10">
-                    <div class="w-12 h-12 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center text-zinc-400 transition-all">
-                        <i data-lucide="book-open" class="w-6 h-6"></i>
+            <!-- Syllabus Tracker -->
+            <div class="glass-card tilt-card p-6 md:p-8 group opacity-0 animate-fade-in-up delay-300 flex flex-col relative">
+                <div class="card-content flex flex-col flex-grow pointer-events-none">
+                    <div class="flex justify-between items-start mb-5">
+                        <div class="w-12 h-12 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center text-zinc-400 group-hover:text-white transition-all duration-300">
+                            <i data-lucide="book-open" class="w-6 h-6"></i>
+                        </div>
                     </div>
-                </div>
-                <div class="relative z-10 flex-grow">
                     <h2 class="text-xl font-black text-white tracking-tight mb-2">Syllabus Tracker</h2>
-                    <p class="text-sm font-medium text-zinc-400 leading-relaxed">Chapter & topic wise tracking. The ultimate tool for syllabus mastery and readiness scores.</p>
+                    <p class="text-sm font-medium text-zinc-400 leading-relaxed mb-6 flex-grow">Chapter & topic wise tracking. The ultimate tool for syllabus mastery and readiness scores.</p>
                 </div>
-                <!-- Action Buttons -->
-                <div class="relative z-10 flex gap-3 mt-2">
-                    <a href="https://sval.tech/syllabustracker/" target="_blank" class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-zinc-800 border border-zinc-700 hover:bg-brand-600 hover:border-brand-500 text-white font-bold text-sm transition-all shadow-sm hover:shadow-[0_0_15px_rgba(139,92,246,0.3)] active:scale-95">
-                        JEE <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                
+                <!-- Interactive Buttons -->
+                <div class="relative z-20 flex gap-3 mt-auto">
+                    <a href="https://sval.tech/syllabustracker/" target="_blank" class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-zinc-800 border border-zinc-700 hover:bg-quantum-violet hover:border-quantum-violet text-white font-bold text-sm transition-all shadow-sm active:scale-95 group/btn">
+                        JEE <i data-lucide="arrow-right" class="w-3 h-3 group-hover/btn:translate-x-1 transition-transform"></i>
                     </a>
-                    <a href="https://sval.tech/neet/" target="_blank" class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-zinc-800 border border-zinc-700 hover:bg-emerald-600 hover:border-emerald-500 text-white font-bold text-sm transition-all shadow-sm hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] active:scale-95">
-                        NEET <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    <a href="https://sval.tech/neet/" target="_blank" class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-zinc-800 border border-zinc-700 hover:bg-quantum-cyan hover:border-quantum-cyan text-white font-bold text-sm transition-all shadow-sm active:scale-95 group/btn">
+                        NEET <i data-lucide="arrow-right" class="w-3 h-3 group-hover/btn:translate-x-1 transition-transform"></i>
                     </a>
                 </div>
             </div>
-
         </main>
 
         <!-- Footer -->
-        <footer class="mt-24 pt-8 w-full border-t border-zinc-800/50 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold uppercase tracking-widest text-zinc-500 opacity-0 animate-slide-up-fade stagger-3">
+        <footer class="mt-24 pt-8 w-full border-t border-zinc-800/50 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold uppercase tracking-widest text-zinc-500 opacity-0 animate-fade-in-up delay-300">
             <span>&copy; 2026 sval.tech</span>
             <div class="flex items-center gap-2">
-                <i data-lucide="code-2" class="w-4 h-4 text-brand-500"></i>
+                <i data-lucide="code-2" class="w-4 h-4 text-quantum-violet"></i>
                 <span class="text-zinc-400">By Shaurya Pratap Singh</span>
             </div>
         </footer>
     </div>
 
-    <!-- Scripts -->
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script>
         // Initialize Icons
         lucide.createIcons();
 
-        // --- MOUSE GLOW EFFECT (ChaosPrep Style) ---
-        document.querySelectorAll('.glass-card').forEach(card => {
+        // --- PREMIUM 3D TILT & MOUSE GLOW ---
+        const cards = document.querySelectorAll('.glass-card');
+        
+        cards.forEach(card => {
             card.addEventListener('mousemove', e => {
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
+                
                 card.style.setProperty('--mouse-x', `${x}px`);
                 card.style.setProperty('--mouse-y', `${y}px`);
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -5; 
+                const rotateY = ((x - centerX) / centerX) * 5;
+                
+                card.style.transform = `perspective(2000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(2000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                card.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)'; 
+            });
+            
+            card.addEventListener('mouseenter', () => {
+                card.style.transition = 'none'; 
             });
         });
 
-        // --- HIGH-PERFORMANCE 3D CANVAS NEXUS (Re-themed to Brand Purple) ---
-        const canvas = document.getElementById('nexus-canvas');
-        const ctx = canvas.getContext('2d');
-        
-        let width, height;
-        let particles = [];
-        
-        // Optimize for mobile vs desktop
-        const isMobile = window.innerWidth < 768;
-        const particleCount = isMobile ? 30 : 70;
-        const connectionDistance = isMobile ? 100 : 150;
-        
-        // 3D Camera settings
-        const fov = 250;
+        // --- EXTREME 3D ANIMATION: "HOLOGRAPHIC GEOMETRIC NEXUS" ---
+        const canvas = document.getElementById('webgl-canvas');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x030305, 0.015);
 
-        function resize() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 0, 40);
+
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // Group to hold our massive structures
+        const nexusGroup = new THREE.Group();
+        scene.add(nexusGroup);
+
+        // 1. Inner Core (Complex Wireframe Icosahedron)
+        const coreGeo = new THREE.IcosahedronGeometry(12, 2);
+        const coreMat = new THREE.MeshBasicMaterial({ 
+            color: 0x7c3aed, 
+            wireframe: true, 
+            transparent: true, 
+            opacity: 0.15 
+        });
+        const coreMesh = new THREE.Mesh(coreGeo, coreMat);
+        nexusGroup.add(coreMesh);
+
+        // 2. Outer Geometric Cage (Larger, different rotation)
+        const cageGeo = new THREE.IcosahedronGeometry(20, 1);
+        const cageMat = new THREE.MeshBasicMaterial({ 
+            color: 0x06b6d4, 
+            wireframe: true, 
+            transparent: true, 
+            opacity: 0.08 
+        });
+        const cageMesh = new THREE.Mesh(cageGeo, cageMat);
+        nexusGroup.add(cageMesh);
+
+        // 3. Drifting Data Particles (Starfield)
+        const particleCount = window.innerWidth < 768 ? 500 : 1500;
+        const particleGeo = new THREE.BufferGeometry();
+        const posArray = new Float32Array(particleCount * 3);
+        const speeds = new Float32Array(particleCount); // Unique speed for each particle
+
+        for(let i = 0; i < particleCount; i++) {
+            // Distribute particles in a large sphere
+            const radius = 25 + Math.random() * 50;
+            const theta = Math.random() * 2 * Math.PI;
+            const phi = Math.acos((Math.random() * 2) - 1);
+            
+            posArray[i*3] = radius * Math.sin(phi) * Math.cos(theta);
+            posArray[i*3+1] = radius * Math.sin(phi) * Math.sin(theta);
+            posArray[i*3+2] = radius * Math.cos(phi);
+            
+            speeds[i] = Math.random() * 0.02 + 0.005;
         }
-        window.addEventListener('resize', resize);
-        resize();
 
-        class Particle {
-            constructor() {
-                this.x = (Math.random() - 0.5) * width * 2;
-                this.y = (Math.random() - 0.5) * height * 2;
-                this.z = Math.random() * width;
-                this.baseSize = Math.random() * 1.5 + 0.5;
-            }
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particleMat = new THREE.PointsMaterial({
+            size: 0.15,
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.4,
+            blending: THREE.AdditiveBlending
+        });
+        const particleMesh = new THREE.Points(particleGeo, particleMat);
+        nexusGroup.add(particleMesh);
 
-            update() {
-                this.z -= 0.5; // Drift towards camera
-                if (this.z < -fov) {
-                    this.z = width;
-                    this.x = (Math.random() - 0.5) * width * 2;
-                    this.y = (Math.random() - 0.5) * height * 2;
-                }
-            }
+        // Animation Loop Variables
+        let mouseX = 0;
+        let mouseY = 0;
+        const target = new THREE.Vector3();
+        const clock = new THREE.Clock();
 
-            draw() {
-                const scale = fov / (fov + this.z);
-                const x2d = (this.x * scale) + (width / 2);
-                const y2d = (this.y * scale) + (height / 2) - 100;
-
-                if (x2d >= 0 && x2d <= width && y2d >= 0 && y2d <= height) {
-                    ctx.beginPath();
-                    ctx.arc(x2d, y2d, this.baseSize * scale * 2, 0, Math.PI * 2);
-                    // ChaosPrep Brand Color Node (Purple)
-                    ctx.fillStyle = `rgba(139, 92, 246, ${scale * 1.5})`;
-                    ctx.fill();
-                }
-                return { x: x2d, y: y2d, scale: scale };
-            }
-        }
-
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
+        // Mouse tracking for parallax
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - window.innerWidth / 2) * 0.05;
+            mouseY = (event.clientY - window.innerHeight / 2) * 0.05;
+        });
 
         function animate() {
-            ctx.clearRect(0, 0, width, height);
-            const projected = [];
+            requestAnimationFrame(animate);
+            const delta = clock.getDelta();
 
-            particles.forEach(p => {
-                p.update();
-                projected.push(p.draw());
-            });
+            // Rotate the Geometric Cores in opposite directions
+            coreMesh.rotation.x += 0.1 * delta;
+            coreMesh.rotation.y += 0.15 * delta;
+            
+            cageMesh.rotation.x -= 0.05 * delta;
+            cageMesh.rotation.y += 0.08 * delta;
+            cageMesh.rotation.z -= 0.03 * delta;
 
-            for (let i = 0; i < projected.length; i++) {
-                for (let j = i + 1; j < projected.length; j++) {
-                    const p1 = projected[i];
-                    const p2 = projected[j];
+            // Slowly rotate the entire nexus group
+            nexusGroup.rotation.y += 0.02 * delta;
 
-                    if (p1.x < 0 || p1.x > width || p1.y < 0 || p1.y > height) continue;
-
-                    const dx = p1.x - p2.x;
-                    const dy = p1.y - p2.y;
-                    const distSq = dx * dx + dy * dy;
-
-                    if (distSq < connectionDistance * connectionDistance) {
-                        const dist = Math.sqrt(distSq);
-                        const opacity = (1 - dist / connectionDistance) * 0.15;
-                        
-                        ctx.beginPath();
-                        ctx.moveTo(p1.x, p1.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        // ChaosPrep Brand Color Connections
-                        ctx.strokeStyle = `rgba(139, 92, 246, ${opacity})`;
-                        ctx.lineWidth = (p1.scale + p2.scale) * 0.5;
-                        ctx.stroke();
-                    }
+            // Animate particles moving towards the camera slightly
+            const positions = particleGeo.attributes.position.array;
+            for(let i = 0; i < particleCount; i++) {
+                positions[i*3+2] += speeds[i]; // move on Z axis
+                // Reset particle if it gets too close to camera
+                if(positions[i*3+2] > 30) {
+                    positions[i*3+2] = -50; 
                 }
             }
-            requestAnimationFrame(animate);
+            particleGeo.attributes.position.needsUpdate = true;
+
+            // Smooth Camera Parallax Tracking
+            target.x = mouseX;
+            target.y = -mouseY;
+            target.z = 40;
+            
+            camera.position.lerp(target, 0.02);
+            camera.lookAt(0, 0, 0);
+
+            renderer.render(scene, camera);
         }
+
+        // Handle Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Start animation
         animate();
     </script>
 </body>
