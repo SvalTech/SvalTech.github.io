@@ -1,409 +1,146 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>sval.tech | By Shaurya Pratap Singh | svalordev</title>
-    
-    <!-- Advanced SEO -->
-    <meta name="description" content="Precision academic tools for JEE Main, Advanced & NEET aspirants. Track syllabus, manage backlogs, and analyze consistency with StudyLocus and Zenith.">
-    <meta name="author" content="Shaurya Pratap Singh">
-    
-    <!-- Fonts: Inter for readability, Space Grotesk for technical/modern headings -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Icons & Frameworks -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-    <!-- Tailwind Config -->
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Space Grotesk', 'sans-serif'],
-                    },
-                    colors: {
-                        quantum: {
-                            bg: '#030305',
-                            card: 'rgba(10, 10, 15, 0.4)',
-                            border: 'rgba(255, 255, 255, 0.08)',
-                            violet: '#7c3aed',
-                            cyan: '#06b6d4',
-                            glow: 'rgba(124, 58, 237, 0.5)'
-                        }
-                    },
-                    animation: {
-                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Standard SEO -->
+    <meta name="description" content="Precision academic tools for JEE, NEET and competitive exam aspirants. Track syllabus, manage backlogs, and analyze consistency.">
+    <meta name="author" content="Shaurya Pratap Singh">
+
+    <!-- Minimalist Utility Framework -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
+        /* Strict adherence to the minimalist document aesthetic */
         body {
-            background-color: #030305;
-            color: #ffffff;
-            overflow-x: hidden;
+            background-color: #ffffff;
+            color: #000000;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+
+            /* Custom Precision Default Cursor */
+            cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='4' fill='black' stroke='white' stroke-width='1.5'/%3E%3C/svg%3E") 12 12, auto;
         }
 
-        /* --- 3D CANVAS BACKGROUND --- */
-        #webgl-canvas {
-            position: fixed;
-            top: 0; left: 0; 
-            width: 100vw; height: 100vh;
-            z-index: -2; 
-            pointer-events: none;
+        /* Force clean, native system fonts for primary text */
+        .font-sans {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
-        /* Ambient subtle gradient overlay for depth */
-        .ambient-glow {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: radial-gradient(circle at 50% 0%, rgba(124, 58, 237, 0.1) 0%, transparent 70%);
-            z-index: -1;
-            pointer-events: none;
+        /* Monospace for small technical details and links */
+        .font-mono {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
         }
 
-        /* --- PREMIUM GLASSMORPHISM CARDS --- */
-        .glass-card {
-            background: var(--quantum-card);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--quantum-border);
-            border-radius: 24px;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-            transform-style: preserve-3d;
+        /* Strip default styling for structural anchors */
+        a { text-decoration: none; }
+
+        /* Custom Precision Pointer Cursor for Interactive Elements */
+        a, button, [role="button"], .cursor-pointer {
+            cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='6' fill='white' stroke='black' stroke-width='1.5'/%3E%3Ccircle cx='12' cy='12' r='2' fill='black'/%3E%3C/svg%3E") 12 12, pointer !important;
         }
-
-        /* Hover Glow Effect inside card */
-        .glass-card::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.06), transparent 40%);
-            opacity: 0;
-            transition: opacity 0.5s;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .glass-card:hover::before { opacity: 1; }
-
-        /* Animated Gradient Border on Hover */
-        .glass-card::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            border-radius: 24px;
-            padding: 1px;
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.8), rgba(6, 182, 212, 0.8));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            pointer-events: none;
-        }
-        
-        .glass-card:hover::after { opacity: 1; }
-
-        .glass-card:hover {
-            transform: translateY(-4px) scale(1.01);
-            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5), 0 0 20px -5px rgba(124, 58, 237, 0.2);
-        }
-
-        /* Inner Content 3D Pop */
-        .card-content {
-            position: relative;
-            z-index: 10;
-            transform: translateZ(30px);
-        }
-
-        /* Staggered Animations */
-        .delay-100 { animation-delay: 100ms; }
-        .delay-200 { animation-delay: 200ms; }
-        .delay-300 { animation-delay: 300ms; }
-        
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #030305; }
-        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #7c3aed; }
     </style>
 </head>
+<body class="font-sans min-h-screen selection:bg-black selection:text-white">
 
-<body class="min-h-screen flex flex-col items-center selection:bg-quantum-violet/30 selection:text-white">
+    <!-- Narrow, single-column container for optimal readability -->
+    <div class="max-w-2xl mx-auto px-6 py-16 md:py-24">
 
-    <!-- 3D Environment -->
-    <canvas id="webgl-canvas"></canvas>
-    <div class="ambient-glow"></div>
+        <!-- Header -->
+        <header class="mb-16 border-b border-gray-200 pb-10">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-8 mb-8">
+                <div>
+                    <h1 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">sval.tech</h1>
+                    <p class="text-gray-700 leading-relaxed max-w-sm">
+                        Precision academic tools for JEE, NEET and competitive exam aspirants. Track syllabus, manage backlogs, and maintain consistency.
+                    </p>
+                </div>
 
-    <!-- Main Content -->
-    <div class="w-full max-w-5xl px-6 py-16 md:py-24 flex flex-col items-center relative z-10">
-        
-        <!-- Header Section -->
-        <header class="w-full text-center flex flex-col items-center mb-16 opacity-0 animate-fade-in-up">
-            
-            <h1 class="text-5xl md:text-7xl font-black font-display tracking-tighter mb-4">
-                sval.tech
-            </h1>
-            
-            <!-- Original Style Links -->
-            <nav class="flex flex-wrap justify-center gap-3 mt-4">
-                <a href="https://github.com/svalordev" target="_blank" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900/50 border border-zinc-800 hover:border-quantum-violet/50 hover:bg-zinc-800 text-sm font-bold text-zinc-400 hover:text-white transition-all backdrop-blur-md group">
-                    <i data-lucide="github" class="w-4 h-4 group-hover:text-quantum-violet transition-colors"></i> /github
+                <!-- Partnered With AlphaJEE -->
+                <div class="flex flex-col items-start md:items-end gap-2">
+                    <span class="font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">Partnered With</span>
+                    <a href="https://alphajee.online" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 group/brand transition-opacity duration-200 hover:opacity-80">
+                        <div class="w-6 h-6 flex items-center justify-center overflow-hidden">
+                            <img class="w-full h-full object-contain filter grayscale group-hover/brand:grayscale-0 transition-all duration-300" alt="AlphaJEE" src="https://jtestify.alphajee.online/alphajee.png">
+                        </div>
+                        <span class="text-lg font-bold text-gray-500 group-hover/brand:text-black transition-colors tracking-tight">AlphaJEE</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Social Proof -->
+            <div class="inline-flex items-center gap-3 mb-8 px-3 py-1.5 border border-gray-200 font-mono text-[11px] leading-none text-gray-500 uppercase tracking-wide bg-gray-50/50">
+                <div class="flex items-center gap-1.5 text-black" title="Registered securely using Google">
+                    <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 15.907 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
+                    <span class="font-bold mt-[1px]">Google Auth</span>
+                </div>
+                <span class="w-px h-3 bg-gray-300 block"></span>
+                <span class="mt-[1px]">3k+ Registered Aspirants</span>
+            </div>
+
+            <nav class="flex flex-wrap gap-x-6 gap-y-3 font-mono text-sm text-black">
+                <!-- Links use simple underline on hover, zero transitions for a snappy feel -->
+                <a href="https://github.com/svalordev" target="_blank" class="flex items-center gap-1.5 hover:underline">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    github
                 </a>
-                <a href="/cdn-cgi/l/email-protection" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900/50 border border-zinc-800 hover:border-quantum-cyan/50 hover:bg-zinc-800 text-sm font-bold text-zinc-400 hover:text-white transition-all backdrop-blur-md group">
-                    <i data-lucide="mail" class="w-4 h-4 group-hover:text-quantum-cyan transition-colors"></i> /contact
+                <a href="mailto:contact@sval.tech" class="flex items-center gap-1.5 hover:underline">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    contact
                 </a>
-                <a href="https://discord.gg/mKXPpSY6Dz" target="_blank" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900/50 border border-zinc-800 hover:border-white/50 hover:bg-zinc-800 text-sm font-bold text-zinc-400 hover:text-white transition-all backdrop-blur-md group">
-                    <i data-lucide="message-square" class="w-4 h-4 group-hover:text-white transition-colors"></i> /discord
+                <a href="https://discord.gg/mKXPpSY6Dz" target="_blank" class="flex items-center gap-1.5 hover:underline">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+                    discord
                 </a>
             </nav>
         </header>
 
-        <!-- Tools Grid -->
-        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full perspective-[2000px]">
-            
-            <!-- ChaosPrep -->
-            <a href="https://sval.tech/chaos" target="_blank" class="glass-card tilt-card p-6 md:p-8 group opacity-0 animate-fade-in-up delay-100 decoration-none block">
-                <div class="card-content flex flex-col h-full pointer-events-none">
-                    <div class="flex justify-between items-start mb-5">
-                        <div class="w-12 h-12 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center text-zinc-400 group-hover:bg-quantum-violet/20 group-hover:text-quantum-violet group-hover:border-quantum-violet/30 transition-all duration-300">
-                            <i data-lucide="calendar-days" class="w-6 h-6"></i>
-                        </div>
-                        <i data-lucide="arrow-up-right" class="w-5 h-5 text-zinc-600 group-hover:text-quantum-violet transition-colors"></i>
-                    </div>
-                    <h2 class="text-xl font-black text-white tracking-tight mb-2">ChaosPrep</h2>
-                    <p class="text-sm font-medium text-zinc-400 leading-relaxed flex-grow">Master your daily chaos. Day/Week wise task tracking in a calendar grid. Optimized for Focus.</p>
+        <main class="space-y-6">
+            <!-- ChaosPrep Tool -->
+            <a href="https://sval.tech/chaos" target="_blank" class="block border border-gray-300 p-6 sm:p-8 hover:border-black transition-colors duration-200 group text-black cursor-pointer">
+                <div class="flex justify-between items-start mb-3">
+                    <h2 class="text-xl font-bold tracking-tight">ChaosPrep</h2>
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-black transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M7 17L17 7M7 7h10v10"></path></svg>
                 </div>
+                <p class="text-gray-700 leading-relaxed m-0">Master your daily chaos. Day/Week wise task tracking in a calendar grid. Optimized for Focus. With social accountability.</p>
             </a>
 
-            <!-- StudyLocus -->
-            <a href="https://sval.tech/studylocus/" target="_blank" class="glass-card tilt-card p-6 md:p-8 group opacity-0 animate-fade-in-up delay-200 decoration-none block">
-                <div class="card-content flex flex-col h-full pointer-events-none">
-                    <div class="flex justify-between items-start mb-5">
-                        <div class="w-12 h-12 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center text-zinc-400 group-hover:bg-quantum-cyan/20 group-hover:text-quantum-cyan group-hover:border-quantum-cyan/30 transition-all duration-300">
-                            <i data-lucide="target" class="w-6 h-6"></i>
-                        </div>
-                        <i data-lucide="arrow-up-right" class="w-5 h-5 text-zinc-600 group-hover:text-quantum-cyan transition-colors"></i>
-                    </div>
-                    <h2 class="text-xl font-black text-white tracking-tight mb-2">StudyLocus</h2>
-                    <p class="text-sm font-medium text-zinc-400 leading-relaxed flex-grow">A functional, highly aesthetic dashboard for complete preparation management & analytics.</p>
+            <!-- StudyLocus Tool -->
+            <a href="https://sval.tech/studylocus/" target="_blank" class="block border border-gray-300 p-6 sm:p-8 hover:border-black transition-colors duration-200 group text-black cursor-pointer">
+                <div class="flex justify-between items-start mb-3">
+                    <h2 class="text-xl font-bold tracking-tight">StudyLocus</h2>
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-black transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M7 17L17 7M7 7h10v10"></path></svg>
                 </div>
+                <p class="text-gray-700 leading-relaxed m-0">A functional, highly aesthetic dashboard for complete preparation management & analytics.</p>
             </a>
 
-            <!-- Syllabus Tracker -->
-            <div class="glass-card tilt-card p-6 md:p-8 group opacity-0 animate-fade-in-up delay-300 flex flex-col relative">
-                <div class="card-content flex flex-col flex-grow pointer-events-none">
-                    <div class="flex justify-between items-start mb-5">
-                        <div class="w-12 h-12 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center text-zinc-400 group-hover:text-white transition-all duration-300">
-                            <i data-lucide="book-open" class="w-6 h-6"></i>
-                        </div>
-                    </div>
-                    <h2 class="text-xl font-black text-white tracking-tight mb-2">Syllabus Tracker</h2>
-                    <p class="text-sm font-medium text-zinc-400 leading-relaxed mb-6 flex-grow">Chapter & topic wise tracking. The ultimate tool for syllabus mastery and readiness scores.</p>
+            <!-- Syllabus Tracker Div -->
+            <div class="border border-gray-300 p-6 sm:p-8 hover:border-black transition-colors duration-200 group">
+                <div class="flex justify-between items-start mb-3">
+                    <h2 class="text-xl font-bold tracking-tight">Syllabus Tracker</h2>
                 </div>
-                
-                <!-- Interactive Buttons -->
-                <div class="relative z-20 flex gap-3 mt-auto">
-                    <a href="https://sval.tech/syllabustracker/" target="_blank" class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-zinc-800 border border-zinc-700 hover:bg-quantum-violet hover:border-quantum-violet text-white font-bold text-sm transition-all shadow-sm active:scale-95 group/btn">
-                        JEE <i data-lucide="arrow-right" class="w-3 h-3 group-hover/btn:translate-x-1 transition-transform"></i>
+                <p class="text-gray-700 leading-relaxed mb-6">Chapter & topic wise tracking. The ultimate tool for syllabus mastery and readiness scores.</p>
+                <div class="flex flex-wrap gap-6 font-mono text-sm">
+                    <a href="https://sval.tech/syllabustracker/" target="_blank" class="text-black hover:underline flex items-center gap-1.5 group/link">
+                        JEE Tracker
+                        <svg class="w-3.5 h-3.5 text-gray-400 group-hover/link:text-black transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"></path></svg>
                     </a>
-                    <a href="https://sval.tech/neet/" target="_blank" class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-zinc-800 border border-zinc-700 hover:bg-quantum-cyan hover:border-quantum-cyan text-white font-bold text-sm transition-all shadow-sm active:scale-95 group/btn">
-                        NEET <i data-lucide="arrow-right" class="w-3 h-3 group-hover/btn:translate-x-1 transition-transform"></i>
+                    <a href="https://sval.tech/neet/" target="_blank" class="text-black hover:underline flex items-center gap-1.5 group/link">
+                        NEET Tracker
+                        <svg class="w-3.5 h-3.5 text-gray-400 group-hover/link:text-black transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"></path></svg>
                     </a>
                 </div>
             </div>
         </main>
 
         <!-- Footer -->
-        <footer class="mt-24 pt-8 w-full border-t border-zinc-800/50 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold uppercase tracking-widest text-zinc-500 opacity-0 animate-fade-in-up delay-300">
+        <footer class="mt-20 pt-8 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 font-mono text-xs text-gray-500 uppercase tracking-widest">
             <span>&copy; 2026 sval.tech</span>
-            <div class="flex items-center gap-2">
-                <i data-lucide="code-2" class="w-4 h-4 text-quantum-violet"></i>
-                <span class="text-zinc-400">By Shaurya Pratap Singh</span>
-            </div>
+            <span>By Shaurya Pratap Singh</span>
         </footer>
+
     </div>
-
-    <script>
-        // Initialize Icons
-        lucide.createIcons();
-
-        // --- PREMIUM 3D TILT & MOUSE GLOW ---
-        const cards = document.querySelectorAll('.glass-card');
-        
-        cards.forEach(card => {
-            card.addEventListener('mousemove', e => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                card.style.setProperty('--mouse-x', `${x}px`);
-                card.style.setProperty('--mouse-y', `${y}px`);
-
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const rotateX = ((y - centerY) / centerY) * -5; 
-                const rotateY = ((x - centerX) / centerX) * 5;
-                
-                card.style.transform = `perspective(2000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = `perspective(2000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-                card.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)'; 
-            });
-            
-            card.addEventListener('mouseenter', () => {
-                card.style.transition = 'none'; 
-            });
-        });
-
-        // --- EXTREME 3D ANIMATION: "HOLOGRAPHIC GEOMETRIC NEXUS" ---
-        const canvas = document.getElementById('webgl-canvas');
-        const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x030305, 0.015);
-
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 0, 40);
-
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-        // Group to hold our massive structures
-        const nexusGroup = new THREE.Group();
-        scene.add(nexusGroup);
-
-        // 1. Inner Core (Complex Wireframe Icosahedron)
-        const coreGeo = new THREE.IcosahedronGeometry(12, 2);
-        const coreMat = new THREE.MeshBasicMaterial({ 
-            color: 0x7c3aed, 
-            wireframe: true, 
-            transparent: true, 
-            opacity: 0.15 
-        });
-        const coreMesh = new THREE.Mesh(coreGeo, coreMat);
-        nexusGroup.add(coreMesh);
-
-        // 2. Outer Geometric Cage (Larger, different rotation)
-        const cageGeo = new THREE.IcosahedronGeometry(20, 1);
-        const cageMat = new THREE.MeshBasicMaterial({ 
-            color: 0x06b6d4, 
-            wireframe: true, 
-            transparent: true, 
-            opacity: 0.08 
-        });
-        const cageMesh = new THREE.Mesh(cageGeo, cageMat);
-        nexusGroup.add(cageMesh);
-
-        // 3. Drifting Data Particles (Starfield)
-        const particleCount = window.innerWidth < 768 ? 500 : 1500;
-        const particleGeo = new THREE.BufferGeometry();
-        const posArray = new Float32Array(particleCount * 3);
-        const speeds = new Float32Array(particleCount); // Unique speed for each particle
-
-        for(let i = 0; i < particleCount; i++) {
-            // Distribute particles in a large sphere
-            const radius = 25 + Math.random() * 50;
-            const theta = Math.random() * 2 * Math.PI;
-            const phi = Math.acos((Math.random() * 2) - 1);
-            
-            posArray[i*3] = radius * Math.sin(phi) * Math.cos(theta);
-            posArray[i*3+1] = radius * Math.sin(phi) * Math.sin(theta);
-            posArray[i*3+2] = radius * Math.cos(phi);
-            
-            speeds[i] = Math.random() * 0.02 + 0.005;
-        }
-
-        particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        const particleMat = new THREE.PointsMaterial({
-            size: 0.15,
-            color: 0xffffff,
-            transparent: true,
-            opacity: 0.4,
-            blending: THREE.AdditiveBlending
-        });
-        const particleMesh = new THREE.Points(particleGeo, particleMat);
-        nexusGroup.add(particleMesh);
-
-        // Animation Loop Variables
-        let mouseX = 0;
-        let mouseY = 0;
-        const target = new THREE.Vector3();
-        const clock = new THREE.Clock();
-
-        // Mouse tracking for parallax
-        document.addEventListener('mousemove', (event) => {
-            mouseX = (event.clientX - window.innerWidth / 2) * 0.05;
-            mouseY = (event.clientY - window.innerHeight / 2) * 0.05;
-        });
-
-        function animate() {
-            requestAnimationFrame(animate);
-            const delta = clock.getDelta();
-
-            // Rotate the Geometric Cores in opposite directions
-            coreMesh.rotation.x += 0.1 * delta;
-            coreMesh.rotation.y += 0.15 * delta;
-            
-            cageMesh.rotation.x -= 0.05 * delta;
-            cageMesh.rotation.y += 0.08 * delta;
-            cageMesh.rotation.z -= 0.03 * delta;
-
-            // Slowly rotate the entire nexus group
-            nexusGroup.rotation.y += 0.02 * delta;
-
-            // Animate particles moving towards the camera slightly
-            const positions = particleGeo.attributes.position.array;
-            for(let i = 0; i < particleCount; i++) {
-                positions[i*3+2] += speeds[i]; // move on Z axis
-                // Reset particle if it gets too close to camera
-                if(positions[i*3+2] > 30) {
-                    positions[i*3+2] = -50; 
-                }
-            }
-            particleGeo.attributes.position.needsUpdate = true;
-
-            // Smooth Camera Parallax Tracking
-            target.x = mouseX;
-            target.y = -mouseY;
-            target.z = 40;
-            
-            camera.position.lerp(target, 0.02);
-            camera.lookAt(0, 0, 0);
-
-            renderer.render(scene, camera);
-        }
-
-        // Handle Resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // Start animation
-        animate();
-    </script>
 </body>
 </html>
