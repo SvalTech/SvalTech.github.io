@@ -14,17 +14,4 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-// This fires when the push arrives and the app is completely closed
-messaging.onBackgroundMessage((payload) => {
-    console.log('[firebase-messaging-sw.js] Received background message ', payload);
 
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-        body: payload.notification.body,
-        icon: '/logo.png', // Make sure you have a logo.png in your root folder
-        badge: '/logo.png',
-        vibrate: [200, 100, 200]
-    };
-
-    self.registration.showNotification(notificationTitle, notificationOptions);
-});
