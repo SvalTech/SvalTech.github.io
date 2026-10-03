@@ -1,7 +1,253 @@
-<h1>Hello, World!</h1>
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>svalordev's webcave</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
 
-<img src="https://media.tenor.com/os_HrBFJUOoAAAAe/pancake-panquake.png" />
-<br>
+        /* Custom sleek dark scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
 
-Is this peak?
+        ::-webkit-scrollbar-track {
+            background: #000000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 13, 0.25);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 13, 0.6);
+        }
+
+        body {
+            font-family: "Fira Code", monospace;
+            font-optical-sizing: auto;
+            font-weight: 400;
+            font-style: normal;
+            color: rgb(0, 255, 13);
+            background-color: black;
+            padding: 24px;
+            max-width: 680px;
+            line-height: 1.6;
+        }
+
+        a {
+            color: rgb(0, 255, 13);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: all 0.15s ease;
+        }
+
+        a:hover {
+            color: #ffffff;
+            text-shadow: 0 0 8px rgb(0, 255, 13);
+            background-color: rgba(0, 255, 13, 0.12);
+        }
+
+        .ascii-art {
+            font-family: "Fira Code", monospace;
+            font-size: min(9.5px, 1.4vw);
+            line-height: 1.05;
+            white-space: pre;
+            overflow: hidden;
+            margin: 16px 0;
+            color: rgb(0, 255, 13);
+            text-shadow: 0 0 4px rgba(0, 255, 13, 0.35);
+            user-select: none;
+        }
+
+        .social-section {
+            margin: 28px 0;
+        }
+
+        .social-section h3 {
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .social-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .social-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .prompt {
+            color: rgba(0, 255, 13, 0.5);
+            user-select: none;
+        }
+
+        .social-label {
+            color: rgba(0, 255, 13, 0.7);
+        }
+
+        .discord-btn {
+            background: rgba(0, 255, 13, 0.05);
+            border: 1px dashed rgba(0, 255, 13, 0.4);
+            color: rgb(0, 255, 13);
+            font-family: inherit;
+            font-size: inherit;
+            padding: 2px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+        }
+
+        .discord-btn:hover {
+            background: rgba(0, 255, 13, 0.15);
+            border-color: rgb(0, 255, 13);
+            box-shadow: 0 0 8px rgba(0, 255, 13, 0.3);
+        }
+
+        .copy-hint {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        .lastfm-stats {
+            width: 360px;
+            max-width: 100%;
+            height: 180px;
+            border: none;
+            display: block;
+            margin-top: 16px;
+        }
+
+        footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 1px dashed rgba(0, 255, 13, 0.25);
+            font-size: 0.85rem;
+            color: rgba(0, 255, 13, 0.6);
+        }
+
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Hi :3</h1>
+    <p>Hi, I am sval, a 17 year old professional devlarper.</p>
+
+    <!-- ASCII Art Section -->
+    <pre class="ascii-art" id="asciiArt">                    =<+.    ^>~
+                   :>)<: :+)]]~
+                   =)((==>((<^                                                           ~*:
+                  .^][[([}[]).                                                         :*():
+                 .+)[[}}}}[<.                                                         :*)[>:  :=
+                 =>>(]<>)]).                                                          ~<][]=~^<):
+                .=^>)](>>(<.                                                         .^[}}#}()]-
+                :^>^^(]][[+                                                          =)(]}{[(]+
+               .=>))(][}}[~                                                          +)<][}{{).
+               -><][]][}[]:                                                         ~><([}{{[^.
+               =<<)]][}}[(:                  .=>*~~~=<^+^*++++                     -^^>]}}}[]^
+               =((][[}}}[):                :~++~~+^><<))())>>)).:*+**>-:.         :*^>][[]][(*
+               +((][[}}{>.              .~=*++^)))))))))))<)<)[^*^+=*^*+~===      ->>)]}}}}[(-
+               +(]}}{##}<><>)<^==+^~:*~*^>^^>)()))<<<<))<<)<>]<<><***+++==*^^==-. =<>(}}}}[[~
+               .*]}{{{}[)<<>>>^>>><<<<<<((()<))<>><<>)()>>>^>[{](>>>*^*^*==+>>+=+^))([[}}}[>.
+                .>}}}}}}[]()))<)<><)>)()<)]]<)<<<<<<>>>^^^^*>[%%}(])<<^>*+*^><<^^*>][[}}}}]~
+                 +]}}{{}}[[[}}}}[]]]((]()))<]<^^>>>>^^^*^*==*]}#[  ^<[[[]](](()))>^<[{{{{]~
+                  :^(][}{{{{{}}{}[}}[[[[[[<(}(<^*^^++++*^+=+([[}}       ~)(]}}[}}}}}}}{{)-
+                          =<[[}##{{##{{{}{##}]>*++++++***+>]][[}^:=>(]~...      =((][[]>:
+                            :([}}}#%#{{{#{{#}]<>><()<>>>>^([{}[{#{}]))(>>>>
+                          *+>>(<]}{#%{{{[(][}}())<<<<<<<>>([]{[{#{])>^><><>^~
+                       +^)>>())>))]{@#{[<<)(}[(<))<<<)])>^)}[}[}%{}])())))<<>*~
+                    ~*>())<>>((((}}@@#}](()([}]<<<((<>><<>(}[[}{%#{{[(<<<)<)))<>=
+                  ~^>(()(([]][[[<<{#%#{}]())][)>)))<>>)))<]}][}{#{{{{{[()()))))<<>~
+               :**+^^<]][[}{{}=><}{{%{#{]]))([(><(()<<))))][][}^]{#{{{{{}[(((((]]]]*.
+              :^^*+***)[}{{{[>+>]}{{##{{{[(><]())><)]())(]](]}-  =({{{{{{{{}]))(]((<=
+       --~~::=><^***><(}{{[*~<<[}{{{{#{#{}]((]())))(((]]][(]}+     .>({{{{{{}[(]()))<~
+     -))()<<<)(][[[[[}}]*.  ~<][}#{{(:-[#{[((]][(((]]]())][[]:        =({{{}}}[])((<>^-
+     ~)))>>)(<>^)}{{{]~      :(}{[{}<  :[[[(<)(]]()<<)]](][>.           .>}{{{}[[[)<<>~
+      =((]]](()<>(}]~         >((({}{(  .<[][[}[()([}}[[[]~                :){{{{}(<<>-
+       ^()^**^^<<)([):       .*))){}}{)    .-+=*(]]]())(>:                  ~}#%@{)<<*.
+       .>(](>><(<^<]}<:       -^>>][}}[^                                    -[{{#})<)=
+        :<[}[)>)(<><([=        =<<]{[}{(                                    -}{}{[)))~
+         :<[}[()((>>)]):        ))({[}}].                                   :]}[[])<^:
+          -)[}[()()><(]=        ^^>][[}[*                                   ~}}][]<)+
+           -)}}[()])<)()-       ~><[}}}}<                                  .^{}([[))+
+            -([}}](())(]+       :^)[{[[])                                  :(}[][[](+
+             -)}[[(((((]+        <)[{}[]<                                  .<{}]][]>-
+              -(}}[[(([[)=       ]]}}}}[^                                   -[{[(()^:
+               :<}}(<))(<<:      *]}}{}^                                     =}}]((*
+                ~[}[())]((~      :[}}})                                      .^}]((+
+                +}{##]<]}[=        +])~                                       -[}[<.
+                -<((]}]](<=</pre>
+
+    <div class="social-section">
+        <h3>Social Links:</h3>
+        <ul class="social-list">
+            <li class="social-item">
+                <span class="prompt">&gt;</span>
+                <span class="social-label">github:</span>
+                <a href="https://github.com/svalordev" target="_blank"
+                    rel="noopener noreferrer">github.com/svalordev</a>
+            </li>
+            <li class="social-item">
+                <span class="prompt">&gt;</span>
+                <span class="social-label">x / twitter:</span>
+                <a href="https://x.com/svalordev" target="_blank" rel="noopener noreferrer">x.com/svalordev</a>
+            </li>
+            <li class="social-item">
+                <span class="prompt">&gt;</span>
+                <span class="social-label">discord:</span>
+                <button class="discord-btn" id="discordBtn" onclick="copyDiscord()"
+                    title="Click to copy Discord username">
+                    <span>svalordev</span>
+                    <span class="copy-hint" id="discordBadge">[copy]</span>
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <h3>What I'm listening to rn:</h3>
+    <iframe class="lastfm-stats"
+        src="https://lastfm-embed.vercel.app/api/currently-playing?user=svalordev&lang=en&theme=dark&borderSize=0&borderRadius=0&showTitle=false&bgColor=%23000&textColor=%2300ff0d&urlColor=%2300ff0d&scrobbleColor=%2300ff0d"
+        title="Last.fm Currently Playing" scrolling="no" loading="lazy"></iframe>
+
+    <footer>
+        <p>&copy; 2026 sval.tech</p>
+    </footer>
+
+    <script>
+        function copyDiscord() {
+            navigator.clipboard.writeText('svalordev').then(() => {
+                const badge = document.getElementById('discordBadge');
+                if (badge) {
+                    badge.textContent = '[copied!]';
+                    setTimeout(() => {
+                        badge.textContent = '[copy]';
+                    }, 2000);
+                }
+            }).catch(() => {
+                prompt('Discord username:', 'svalordev');
+            });
+        }
+    </script>
+
+    <!-- Who's looking at the source like a good boy? -->
+</body>
+
+</html>
