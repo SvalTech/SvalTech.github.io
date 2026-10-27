@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sval.tech | blurt studio</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --sidebar-width: 320px;
+            --panel-bg: #090909;
+            --panel-border: rgba(0, 255, 13, 0.25);
+            --panel-active: rgba(0, 255, 13, 0.12);
+            --header-height: 52px;
+        }
+
+        body {
+            max-width: 100vw;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background-color: #000;
+        }
+
+        /* Top Bar */
+        .app-header {
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 18px;
+            border-bottom: 1px solid var(--panel-border);
+            background: #050505;
+            z-index: 100;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .header-title a {
+            text-decoration: none;
+            color: var(--term-green);
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 3px;
+            background: rgba(0, 255, 13, 0.08);
+            border: 1px solid var(--term-green-muted);
+            color: var(--term-green);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Terminal Buttons */
+        .t-btn {
+            background: black;
+            border: 1px solid var(--term-green-muted);
+            color: var(--term-green);
+            font-family: inherit;
+            font-size: 0.85rem;
+            padding: 5px 12px;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            user-select: none;
+        }
+
+        .t-btn:hover {
+            border-color: var(--term-green);
+            background: var(--panel-active);
+            box-shadow: 0 0 8px rgba(0, 255, 13, 0.3);
+            color: #fff;
+        }
+
+        .t-btn.primary {
+            background: rgba(0, 255, 13, 0.15);
+            border-color: var(--term-green);
+            font-weight: 600;
+        }
+
+        .t-btn.primary:hover {
+            background: rgba(0, 255, 13, 0.3);
+        }
+
+        .t-btn.small {
+            padding: 2px 7px;
+            font-size: 0.75rem;
+        }
+
+        /* Main Workspace Container */
+        .app-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            height: calc(100vh - var(--header-height));
+        }
+
+        /* Left Sidebar: Blurt Management */
+        .sidebar {
+            width: var(--sidebar-width);
+            min-width: 280px;
+            max-width: 400px;
+            background: #060606;
+            border-right: 1px solid var(--panel-border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-section {
+            padding: 12px 14px;
+            border-bottom: 1px solid rgba(0, 255, 13, 0.15);
+        }
+
+        .sidebar-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .sidebar-actions .t-btn {
+            flex: 1;
+            justify-content: center;
+        }
+
+        .sidebar-search {
+            margin-top: 10px;
+        }
+
+        .search-input {
+            width: 100%;
+            box-sizing: border-box;
+            background: black;
+            border: 1px solid var(--term-green-muted);
+            color: var(--term-green);
+            font-family: inherit;
+            padding: 5px 8px;
+            font-size: 0.8rem;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--term-green);
+            box-shadow: 0 0 6px rgba(0, 255, 13, 0.25);
+        }
+
+        .blurt-nav-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 8px;
+            list-style: none;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .nav-blurt-group {
+            border: 1px solid transparent;
+            border-radius: 3px;
+            padding: 4px;
+            transition: all 0.15s ease;
+        }
+
+        .nav-blurt-group:hover {
+            background: rgba(0, 255, 13, 0.04);
+            border-color: rgba(0, 255, 13, 0.1);
+        }
+
+        .nav-blurt-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 8px;
+            border-radius: 2px;
+            cursor: pointer;
+            user-select: none;
+            gap: 6px;
+        }
+
+        .nav-blurt-item:hover,
+        .nav-blurt-item.active {
+            background: var(--panel-active);
+            color: #fff;
+        }
+
+        .nav-blurt-item.active {
+            border-left: 2px solid var(--term-green);
+        }
+
+        .blurt-info {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+        }
+
+        .blurt-title {
+            font-size: 0.88rem;
+            font-weight: 500;
+        }
+
+        .blurt-meta-tag {
+            font-size: 0.72rem;
+            color: var(--term-green-muted);
+            margin-top: 2px;
+        }
+
+        .nav-sub-list {
+            list-style: none;
+            padding: 0 0 0 12px;
+            margin: 4px 0 0 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .nav-sub-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 8px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            color: rgba(0, 255, 13, 0.85);
+        }
+
+        .nav-sub-item:hover,
+        .nav-sub-item.active {
+            background: var(--panel-active);
+            color: #fff;
+        }
+
+        .nav-sub-item.active {
+            border-left: 2px solid var(--term-green);
+        }
+
+        /* Right Panel: Editor Canvas */
+        .editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #030303;
+        }
+
+        /* Metadata & Config Header */
+        .meta-strip {
+            padding: 14px 24px 10px 24px;
+            border-bottom: 1px solid rgba(0, 255, 13, 0.15);
+            background: #060606;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .title-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px dashed var(--term-green-muted);
+            color: var(--term-green);
+            font-family: inherit;
+            font-size: 1.5rem;
+            font-weight: 600;
+            outline: none;
+            padding: 4px 0 8px 0;
+        }
+
+        .title-input:focus {
+            border-bottom-color: var(--term-green);
+        }
+
+        .title-input::placeholder {
+            color: rgba(0, 255, 13, 0.25);
+        }
+
+        .meta-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            align-items: center;
+            font-size: 0.82rem;
+        }
+
+        .meta-field {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-field label {
+            color: var(--term-green-muted);
+        }
+
+        .meta-field input,
+        .meta-field select {
+            background: black;
+            border: 1px solid var(--term-green-muted);
+            color: var(--term-green);
+            font-family: inherit;
+            font-size: 0.82rem;
+            padding: 4px 8px;
+            outline: none;
+            border-radius: 2px;
+        }
+
+        .meta-field input:focus,
+        .meta-field select:focus {
+            border-color: var(--term-green);
+        }
+
+        .blurb-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .blurb-input {
+            flex: 1;
+            background: black;
+            border: 1px solid var(--term-green-muted);
+            color: var(--term-green);
+            font-family: inherit;
+            font-size: 0.82rem;
+            padding: 4px 8px;
+            outline: none;
+            border-radius: 2px;
+        }
+
+        /* WYSIWYG Toolbar */
+        .toolbar {
+            background: #080808;
+            border-bottom: 1px solid var(--panel-border);
+            padding: 6px 16px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px;
+            user-select: none;
+        }
+
+        .toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            margin-right: 8px;
+            padding-right: 8px;
+            border-right: 1px solid rgba(0, 255, 13, 0.15);
+        }
+
+        .tool-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--term-green);
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 4px 8px;
+            border-radius: 2px;
+            cursor: pointer;
+            min-width: 26px;
+            text-align: center;
+        }
+
+        .tool-btn:hover {
+            border-color: var(--term-green-muted);
+            background: var(--panel-active);
+            color: #fff;
+        }
+
+        .tool-btn:active {
+            background: rgba(0, 255, 13, 0.25);
+        }
+
+        /* Editing Canvas Area */
+        .editor-workspace {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px 48px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .editor-content-wrapper {
+            width: 100%;
+            max-width: 760px;
+        }
+
+        /* Rich Text ContentEditable Styling */
+        .rich-canvas {
+            min-height: 480px;
+            outline: none;
+            color: var(--term-green);
+            font-family: "Fira Code", monospace;
+            font-size: 1rem;
+            line-height: 1.7;
+            padding-bottom: 120px;
+        }
+
+        .rich-canvas:empty:before {
+            content: "Start writing your blurt here... Paste images directly with Ctrl+V or drag & drop!";
+            color: rgba(0, 255, 13, 0.25);
+            pointer-events: none;
+        }
+
+        .rich-canvas h1,
+        .rich-canvas h2,
+        .rich-canvas h3 {
+            color: var(--term-green);
+            margin-top: 1.6em;
+            margin-bottom: 0.6em;
+            font-weight: 600;
+        }
+
+        .rich-canvas h1 { font-size: 1.6rem; border-bottom: 1px dashed var(--term-green-muted); padding-bottom: 6px; }
+        .rich-canvas h2 { font-size: 1.3rem; }
+        .rich-canvas h3 { font-size: 1.15rem; }
+
+        .rich-canvas p {
+            margin: 0.8em 0;
+        }
+
+        .rich-canvas a {
+            color: var(--term-green);
+            text-decoration: underline;
+        }
+
+        .rich-canvas blockquote {
+            border-left: 3px solid var(--term-green);
+            background: rgba(0, 255, 13, 0.05);
+            margin: 1em 0;
+            padding: 6px 14px;
+            color: rgba(0, 255, 13, 0.9);
+            font-style: italic;
+        }
+
+        .rich-canvas pre {
+            background: #020202;
+            border: 1px solid var(--term-green-muted);
+            border-radius: 4px;
+            padding: 12px;
+            overflow-x: auto;
+            margin: 1.2em 0;
+        }
+
+        .rich-canvas code {
+            font-family: inherit;
+            background: rgba(0, 255, 13, 0.08);
+            padding: 2px 5px;
+            border-radius: 2px;
+        }
+
+        .rich-canvas pre code {
+            background: transparent;
+            padding: 0;
+        }
+
+        .rich-canvas ul,
+        .rich-canvas ol {
+            padding-left: 24px;
+            margin: 0.8em 0;
+        }
+
+        .rich-canvas hr {
+            border: 0;
+            border-top: 1px dashed var(--term-green-muted);
+            margin: 2em 0;
+        }
+
+        /* Image in Writer Canvas */
+        .rich-canvas img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--term-green-muted);
+            border-radius: 4px;
+            display: block;
+            margin: 14px 0;
+            box-shadow: 0 0 10px rgba(0, 255, 13, 0.15);
+        }
+
+        /* Raw Markdown View (when toggled) */
+        .markdown-raw {
+            display: none;
+            width: 100%;
+            min-height: 480px;
+            background: #000;
+            border: 1px solid var(--term-green-muted);
+            color: var(--term-green);
+            font-family: inherit;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            padding: 16px;
+            box-sizing: border-box;
+            outline: none;
+            resize: vertical;
+        }
+
+        /* Bottom Status Bar */
+        .status-footer {
+            height: 32px;
+            background: #050505;
+            border-top: 1px solid var(--panel-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 18px;
+            font-size: 0.75rem;
+            color: var(--term-green-muted);
+            user-select: none;
+        }
+
+        .drop-target-active {
+            outline: 2px dashed var(--term-green) !important;
+            background: rgba(0, 255, 13, 0.04) !important;
+        }
+
+        /* Modals & Dialogs */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-box {
+            background: #090909;
+            border: 1px solid var(--term-green);
+            border-radius: 4px;
+            width: 90%;
+            max-width: 550px;
+            padding: 24px;
+            box-shadow: 0 0 24px rgba(0, 255, 13, 0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .modal-box h3 {
+            margin: 0;
+            font-size: 1.15rem;
+            color: var(--term-green);
+        }
+
+        .modal-box textarea {
+            width: 100%;
+            height: 180px;
+            background: black;
+            border: 1px solid var(--term-green-muted);
+            color: var(--term-green);
+            font-family: inherit;
+            font-size: 0.82rem;
+            padding: 10px;
+            box-sizing: border-box;
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- App Header -->
+    <header class="app-header">
+        <div class="header-title">
+            <span class="prompt">&gt;</span>
+            <a href="/" target="_blank">sval.tech</a>
+            <span style="color: var(--term-green-muted);">/</span>
+            <span>blurt studio</span>
+            <span id="workspaceBadge" class="status-badge">📁 Offline / Standalone</span>
+        </div>
+
+        <div class="header-actions">
+            <button class="t-btn" id="btnConnectDir" title="Grant access to project folder to auto-save files directly">
+                <span>📁</span> Connect Folder
+            </button>
+            <button class="t-btn primary" id="btnSave" title="Save blurt (Ctrl+S)">
+                <span>💾</span> Save
+            </button>
+            <button class="t-btn" id="btnExport" title="Export markdown & posts.json">
+                <span>📦</span> Export
+            </button>
+            <a href="/" class="t-btn" id="btnViewSite" target="_blank" title="View live site">
+                <span>🌐</span> Site
+            </a>
+        </div>
+    </header>
+
+    <div class="app-body">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-actions">
+                    <button class="t-btn primary" id="btnNewBlurt" title="Create a top-level main blurt">
+                        + New Blurt
+                    </button>
+                    <button class="t-btn" id="btnNewSub" title="Create a sub-blurt for current series">
+                        + Sub-blurt
+                    </button>
+                </div>
+                <div class="sidebar-search">
+                    <input type="text" id="searchInput" class="search-input" placeholder="filter blurts...">
+                </div>
+            </div>
+
+            <ul class="blurt-nav-list" id="blurtNavList">
+                <li style="padding: 12px; color: var(--term-green-muted); font-size: 0.85rem;">
+                    <span class="prompt">&gt;</span> Loading blurts...
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Editor -->
+        <main class="editor-container">
+            <!-- Metadata Bar -->
+            <div class="meta-strip">
+                <input type="text" id="postTitle" class="title-input" placeholder="Blurt Title..." autocomplete="off">
+
+                <div class="meta-controls">
+                    <div class="meta-field">
+                        <label for="postSlug">slug:</label>
+                        <input type="text" id="postSlug" placeholder="my-blurt-slug" style="width: 170px;">
+                    </div>
+
+                    <div class="meta-field">
+                        <label for="postDate">date:</label>
+                        <input type="date" id="postDate" style="width: 135px;">
+                    </div>
+
+                    <div class="meta-field">
+                        <label for="postHierarchy">type:</label>
+                        <select id="postHierarchy">
+                            <option value="main">Main Blurt</option>
+                            <option value="sub">Sub-blurt of...</option>
+                        </select>
+                    </div>
+
+                    <div class="meta-field" id="parentSelectWrapper" style="display: none;">
+                        <label for="postParent">parent series:</label>
+                        <select id="postParent"></select>
+                    </div>
+                </div>
+
+                <div class="blurb-row" id="blurbWrapper">
+                    <label for="postBlurb" style="color: var(--term-green-muted); font-size: 0.82rem;">blurb:</label>
+                    <input type="text" id="postBlurb" class="blurb-input"
+                        placeholder="one-line blurb beneath title on homepage (main blurts only)">
+                </div>
+            </div>
+
+            <!-- WYSIWYG Toolbar -->
+            <div class="toolbar">
+                <div class="toolbar-group">
+                    <button class="tool-btn" data-cmd="formatBlock" data-val="h1" title="Heading 1">H1</button>
+                    <button class="tool-btn" data-cmd="formatBlock" data-val="h2" title="Heading 2">H2</button>
+                    <button class="tool-btn" data-cmd="formatBlock" data-val="h3" title="Heading 3">H3</button>
+                    <button class="tool-btn" data-cmd="formatBlock" data-val="p" title="Paragraph">P</button>
+                </div>
+
+                <div class="toolbar-group">
+                    <button class="tool-btn" data-cmd="bold" title="Bold (Ctrl+B)"><b>B</b></button>
+                    <button class="tool-btn" data-cmd="italic" title="Italic (Ctrl+I)"><i>I</i></button>
+                    <button class="tool-btn" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+                    <button class="tool-btn" id="btnCodeInline" title="Inline Code">&lt;&gt;</button>
+                </div>
+
+                <div class="toolbar-group">
+                    <button class="tool-btn" data-cmd="insertUnorderedList" title="Bullet List">• List</button>
+                    <button class="tool-btn" data-cmd="insertOrderedList" title="Numbered List">1. List</button>
+                    <button class="tool-btn" data-cmd="formatBlock" data-val="blockquote" title="Quote">” Quote</button>
+                    <button class="tool-btn" id="btnCodeBlock" title="Code Block">``` Code</button>
+                    <button class="tool-btn" data-cmd="insertHorizontalRule" title="Horizontal Divider">— HR</button>
+                </div>
+
+                <div class="toolbar-group">
+                    <button class="tool-btn" id="btnInsertLink" title="Insert Link (Ctrl+K)">🔗 Link</button>
+                    <button class="tool-btn" id="btnInsertImageFile" title="Upload Image File">🖼️ Image</button>
+                    <input type="file" id="imageFileInput" accept="image/*" style="display: none;">
+                </div>
+
+                <div style="margin-left: auto; display: flex; gap: 4px;">
+                    <button class="tool-btn" id="btnToggleMode" title="Switch between Visual Writer and Raw Markdown">
+                        [Raw MD]
+                    </button>
+                </div>
+            </div>
+
+            <!-- Editor Workspace -->
+            <div class="editor-workspace" id="editorWorkspace">
+                <div class="editor-content-wrapper">
+                    <!-- Visual Canvas -->
+                    <div id="richCanvas" class="rich-canvas" contenteditable="true" spellcheck="false"></div>
+
+                    <!-- Raw Markdown View -->
+                    <textarea id="rawMarkdown" class="markdown-raw" spellcheck="false"></textarea>
+                </div>
+            </div>
+
+            <!-- Footer Bar -->
+            <footer class="status-footer">
+                <div id="footerInfo">
+                    <span class="prompt">&gt;</span> Tip: Paste images directly with <kbd>Ctrl+V</kbd>
+                </div>
+                <div id="statsCount">0 words | 0 chars</div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal-overlay" id="exportModal">
+        <div class="modal-box">
+            <h3 id="exportModalTitle">Export Blurt</h3>
+            <p style="margin: 0; font-size: 0.82rem; color: var(--term-green-muted);">
+                Copy this markdown or save directly to <code id="exportFilePath">posts/slug.md</code>:
+            </p>
+            <textarea id="exportText" readonly></textarea>
+            <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                <button class="t-btn" id="btnCopyExport">Copy to Clipboard</button>
+                <button class="t-btn primary" id="btnCloseExport">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Turndown for HTML to Markdown conversion & Marked for loading markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/turndown@7.2.0/dist/turndown.js"></script>
+
+    <script>
+        // State
+        let postsData = [];
+        let currentPost = null;        // active blurt object
+        let currentParent = null;      // parent blurt if sub-blurt
+        let isRawMode = false;
+        let dirHandle = null;          // File System Access directory handle
+        const pendingImages = new Map(); // filename -> Blob
+
+        // Turndown setup for converting Visual HTML -> Clean Markdown
+        const turndownService = new TurndownService({
+            headingStyle: 'atx',
+            codeBlockStyle: 'fenced',
+            emDelimiter: '*'
+        });
+
+        // Custom Turndown rules for clean images
+        turndownService.addRule('removeBadges', {
+            filter: function (node) {
+                return node.classList && (node.classList.contains('img-badge') || node.classList.contains('canvas-image-container'));
+            },
+            replacement: function (content, node) {
+                if (node.classList.contains('img-badge')) return '';
+                return content;
+            }
+        });
+
+        turndownService.addRule('blurtImage', {
+            filter: 'img',
+            replacement: function (content, node) {
+                const alt = node.alt || '';
+                const filename = node.getAttribute('data-filename') || node.getAttribute('src') || 'image.png';
+                const cleanName = filename.split('/').pop().split('?')[0];
+                return `\n\n![${alt}](${cleanName})\n\n`;
+            }
+        });
+
+        // DOM elements
+        const richCanvas = document.getElementById('richCanvas');
+        const rawMarkdown = document.getElementById('rawMarkdown');
+        const postTitle = document.getElementById('postTitle');
+        const postSlug = document.getElementById('postSlug');
+        const postDate = document.getElementById('postDate');
+        const postHierarchy = document.getElementById('postHierarchy');
+        const parentSelectWrapper = document.getElementById('parentSelectWrapper');
+        const postParent = document.getElementById('postParent');
+        const blurbWrapper = document.getElementById('blurbWrapper');
+        const postBlurb = document.getElementById('postBlurb');
+        const blurtNavList = document.getElementById('blurtNavList');
+        const workspaceBadge = document.getElementById('workspaceBadge');
+        const footerInfo = document.getElementById('footerInfo');
+        const statsCount = document.getElementById('statsCount');
+
+        // Initialize
+        async function init() {
+            setTodayDate();
+            setupToolbar();
+            setupImageHandling();
+            setupHotkeys();
+            await loadPosts();
+        }
+
+        function setTodayDate() {
+            const today = new Date().toISOString().split('T')[0];
+            postDate.value = today;
+        }
+
+        // Slugify helper
+        function slugify(text) {
+            return text.toString().toLowerCase().trim()
+                .replace(/\s+/g, '-')
+                .replace(/[^\w\-]+/g, '')
+                .replace(/\-\-+/g, '-');
+        }
+
+        // Live Title -> Slug auto-fill if slug wasn't manually customized
+        let slugManuallyEdited = false;
+        postSlug.addEventListener('input', () => { slugManuallyEdited = true; });
+        postTitle.addEventListener('input', () => {
+            if (!slugManuallyEdited && (!currentPost || !currentPost.slug)) {
+                postSlug.value = slugify(postTitle.value);
+            }
+            updateStats();
+        });
+
+        // Hierarchy switch (Main vs Sub-blurt)
+        postHierarchy.addEventListener('change', () => {
+            const isSub = postHierarchy.value === 'sub';
+            parentSelectWrapper.style.display = isSub ? 'flex' : 'none';
+            blurbWrapper.style.display = isSub ? 'none' : 'flex';
+        });
+
+        // Load posts.json
+        async function loadPosts() {
+            try {
+                if (dirHandle) {
+                    const postsFile = await dirHandle.getFileHandle('posts.json');
+                    const file = await postsFile.getFile();
+                    postsData = JSON.parse(await file.text());
+                } else {
+                    const res = await fetch('posts.json?' + Date.now());
+                    postsData = await res.json();
+                }
+            } catch (err) {
+                console.warn('Could not load posts.json:', err);
+                postsData = [];
+            }
+            populateParentSelect();
+            renderSidebar();
+            
+            // If URL has ?post=slug, load it
+            const urlSlug = new URLSearchParams(window.location.search).get('post');
+            if (urlSlug) {
+                selectBlurtBySlug(urlSlug);
+            } else if (postsData.length && !currentPost) {
+                selectBlurt(postsData[0], null);
+            } else if (!currentPost) {
+                newBlurt();
+            }
+        }
+
+        function populateParentSelect() {
+            postParent.innerHTML = '';
+            postsData.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.slug;
+                opt.textContent = p.title;
+                postParent.appendChild(opt);
+            });
+        }
+
+        // Render Sidebar List
+        function renderSidebar(filterText = '') {
+            blurtNavList.innerHTML = '';
+            const query = filterText.toLowerCase();
+
+            postsData.forEach(p => {
+                const matchesMain = p.title.toLowerCase().includes(query) || (p.blurb && p.blurb.toLowerCase().includes(query));
+                const matchingSubs = (p.sub_blurts || []).filter(s => s.title.toLowerCase().includes(query));
+
+                if (query && !matchesMain && !matchingSubs.length) return;
+
+                const groupLi = document.createElement('li');
+                groupLi.className = 'nav-blurt-group';
+
+                const mainItem = document.createElement('div');
+                const isCurrentActive = currentPost && currentPost.slug === p.slug && !currentParent;
+                mainItem.className = `nav-blurt-item ${isCurrentActive ? 'active' : ''}`;
+                mainItem.innerHTML = `
+                    <div class="blurt-info">
+                        <div class="blurt-title"><span class="prompt">&gt;</span> ${p.title}</div>
+                        <div class="blurt-meta-tag">${p.date}${p.blurb ? ' · ' + p.blurb : ''}</div>
+                    </div>
+                    <button class="t-btn small" title="Add sub-blurt to this series" onclick="event.stopPropagation(); newSubBlurtFor('${p.slug}')">[+sub]</button>
+                `;
+                mainItem.onclick = () => selectBlurt(p, null);
+                groupLi.appendChild(mainItem);
+
+                // Sub-blurts tree
+                if (p.sub_blurts && p.sub_blurts.length > 0) {
+                    const subUl = document.createElement('ul');
+                    subUl.className = 'nav-sub-list';
+
+                    p.sub_blurts.forEach((sub, idx) => {
+                        if (query && !matchesMain && !sub.title.toLowerCase().includes(query)) return;
+                        const isSubActive = currentPost && currentPost.slug === sub.slug && currentParent && currentParent.slug === p.slug;
+                        const isLast = idx === p.sub_blurts.length - 1;
+
+                        const subLi = document.createElement('li');
+                        subLi.className = `nav-sub-item ${isSubActive ? 'active' : ''}`;
+                        subLi.innerHTML = `
+                            <span class="blurt-info">
+                                <span class="tree-branch" style="color: var(--term-green-muted);">${isLast ? '└──' : '├──'}</span>
+                                <span class="prompt">&gt;</span> ${sub.title}
+                            </span>
+                            <span style="font-size: 0.7rem; color: var(--term-green-muted);">${sub.date}</span>
+                        `;
+                        subLi.onclick = () => selectBlurt(sub, p);
+                        subUl.appendChild(subLi);
+                    });
+                    groupLi.appendChild(subUl);
+                }
+
+                blurtNavList.appendChild(groupLi);
+            });
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            renderSidebar(e.target.value);
+        });
+
+        // Select a blurt to edit
+        async function selectBlurt(post, parent = null) {
+            currentPost = post;
+            currentParent = parent;
+            slugManuallyEdited = true;
+
+            postTitle.value = post.title || '';
+            postSlug.value = post.slug || '';
+            postDate.value = post.date || new Date().toISOString().split('T')[0];
+
+            if (parent) {
+                postHierarchy.value = 'sub';
+                parentSelectWrapper.style.display = 'flex';
+                blurbWrapper.style.display = 'none';
+                postParent.value = parent.slug;
+            } else {
+                postHierarchy.value = 'main';
+                parentSelectWrapper.style.display = 'none';
+                blurbWrapper.style.display = 'flex';
+                postBlurb.value = post.blurb || '';
+            }
+
+            // Update URL bar without reload
+            const newUrl = `${window.location.pathname}?post=${encodeURIComponent(post.slug)}`;
+            window.history.replaceState({}, '', newUrl);
+
+            document.getElementById('btnViewSite').href = `/?post=${encodeURIComponent(post.slug)}`;
+
+            renderSidebar(document.getElementById('searchInput').value);
+
+            // Fetch markdown content
+            richCanvas.innerHTML = '<span class="prompt">&gt;</span> Loading blurt content...';
+            rawMarkdown.value = '';
+
+            let mdText = '';
+            try {
+                if (dirHandle) {
+                    const postsDir = await dirHandle.getDirectoryHandle('posts');
+                    const fileHandle = await postsDir.getFileHandle(`${post.slug}.md`);
+                    const file = await fileHandle.getFile();
+                    mdText = await file.text();
+                } else {
+                    const res = await fetch(`posts/${encodeURIComponent(post.slug)}.md?${Date.now()}`);
+                    if (res.ok) mdText = await res.text();
+                }
+            } catch (err) {
+                console.warn('Could not read md file:', err);
+                mdText = `# ${post.title}\n\n`;
+            }
+
+            loadMarkdownIntoCanvas(mdText);
+            footerInfo.innerHTML = `<span class="prompt">&gt;</span> Editing: <b>${post.slug}</b> ${parent ? `(Sub-blurt of ${parent.title})` : ''}`;
+        }
+
+        function selectBlurtBySlug(slug) {
+            for (const p of postsData) {
+                if (p.slug === slug) return selectBlurt(p, null);
+                const sub = (p.sub_blurts || []).find(s => s.slug === slug);
+                if (sub) return selectBlurt(sub, p);
+            }
+        }
+
+        // New Main Blurt
+        function newBlurt() {
+            currentPost = null;
+            currentParent = null;
+            slugManuallyEdited = false;
+
+            postTitle.value = '';
+            postSlug.value = '';
+            setTodayDate();
+            postHierarchy.value = 'main';
+            parentSelectWrapper.style.display = 'none';
+            blurbWrapper.style.display = 'flex';
+            postBlurb.value = '';
+
+            richCanvas.innerHTML = '';
+            rawMarkdown.value = '';
+            postTitle.focus();
+            window.history.replaceState({}, '', window.location.pathname);
+            renderSidebar();
+            footerInfo.innerHTML = '<span class="prompt">&gt;</span> Creating new main blurt...';
+            updateStats();
+        }
+
+        // New Sub-Blurt for specified or current parent
+        function newSubBlurtFor(parentSlug) {
+            const parent = postsData.find(p => p.slug === parentSlug);
+            if (!parent) return;
+
+            currentPost = null;
+            currentParent = parent;
+            slugManuallyEdited = false;
+
+            postTitle.value = '';
+            postSlug.value = '';
+            setTodayDate();
+            postHierarchy.value = 'sub';
+            parentSelectWrapper.style.display = 'flex';
+            postParent.value = parent.slug;
+            blurbWrapper.style.display = 'none';
+            postBlurb.value = '';
+
+            richCanvas.innerHTML = '';
+            rawMarkdown.value = '';
+            postTitle.focus();
+            renderSidebar();
+            footerInfo.innerHTML = `<span class="prompt">&gt;</span> Creating sub-blurt in <b>${parent.title}</b>...`;
+            updateStats();
+        }
+
+        document.getElementById('btnNewBlurt').addEventListener('click', newBlurt);
+        document.getElementById('btnNewSub').addEventListener('click', () => {
+            const parentSlug = postHierarchy.value === 'sub' && postParent.value ? postParent.value : (postsData[0]?.slug || '');
+            if (parentSlug) newSubBlurtFor(parentSlug);
+            else newBlurt();
+        });
+
+        // Markdown <-> Visual Editor sync
+        function loadMarkdownIntoCanvas(md) {
+            rawMarkdown.value = md;
+            const parsedHtml = marked.parse(md || '');
+            richCanvas.innerHTML = parsedHtml;
+
+            // Resolve relative images in canvas for preview
+            richCanvas.querySelectorAll('img').forEach(img => {
+                const src = img.getAttribute('src');
+                if (src && !/^(https?:\/\/|\/|data:|blob:)/i.test(src)) {
+                    img.setAttribute('data-filename', src);
+                    if (currentPost) {
+                        img.src = `images/${encodeURIComponent(currentPost.slug)}/${src}`;
+                    }
+                }
+            });
+
+            updateStats();
+        }
+
+        function getMarkdownFromCanvas() {
+            if (isRawMode) return rawMarkdown.value;
+            // Clean up temporary tags before conversion
+            return turndownService.turndown(richCanvas.innerHTML);
+        }
+
+        // Stats counter
+        function updateStats() {
+            const text = richCanvas.innerText || rawMarkdown.value || '';
+            const words = (text.match(/\S+/g) || []).length;
+            const chars = text.length;
+            statsCount.textContent = `${words} words | ${chars} chars`;
+        }
+        richCanvas.addEventListener('input', updateStats);
+        rawMarkdown.addEventListener('input', updateStats);
+
+        // Visual Toolbar setup
+        function setupToolbar() {
+            document.querySelectorAll('.tool-btn[data-cmd]').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const cmd = btn.getAttribute('data-cmd');
+                    const val = btn.getAttribute('data-val') || null;
+                    document.execCommand(cmd, false, val);
+                    richCanvas.focus();
+                });
+            });
+
+            document.getElementById('btnCodeInline').addEventListener('click', () => {
+                const sel = window.getSelection();
+                if (sel.rangeCount) {
+                    const text = sel.toString();
+                    document.execCommand('insertHTML', false, `<code>${text || 'code'}</code>`);
+                }
+            });
+
+            document.getElementById('btnCodeBlock').addEventListener('click', () => {
+                const sel = window.getSelection();
+                const text = sel.toString() || '// code here';
+                document.execCommand('insertHTML', false, `<pre><code>${text}</code></pre><p><br></p>`);
+            });
+
+            document.getElementById('btnInsertLink').addEventListener('click', () => {
+                const url = prompt('Enter URL:');
+                if (url) document.execCommand('createLink', false, url);
+            });
+
+            // Toggle Visual / Raw Markdown
+            const btnToggle = document.getElementById('btnToggleMode');
+            btnToggle.addEventListener('click', () => {
+                isRawMode = !isRawMode;
+                if (isRawMode) {
+                    rawMarkdown.value = getMarkdownFromCanvas();
+                    richCanvas.style.display = 'none';
+                    rawMarkdown.style.display = 'block';
+                    btnToggle.textContent = '[Visual Canvas]';
+                    btnToggle.classList.add('primary');
+                    rawMarkdown.focus();
+                } else {
+                    loadMarkdownIntoCanvas(rawMarkdown.value);
+                    rawMarkdown.style.display = 'none';
+                    richCanvas.style.display = 'block';
+                    btnToggle.textContent = '[Raw MD]';
+                    btnToggle.classList.remove('primary');
+                    richCanvas.focus();
+                }
+            });
+        }
+
+        // Seamless Image Pasting and Uploading
+        function setupImageHandling() {
+            // Paste Event (Ctrl+V)
+            window.addEventListener('paste', (e) => {
+                // If focus is in a simple input/textarea other than richCanvas, don't hijack unless image
+                const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+                for (const item of items) {
+                    if (item.type.indexOf('image') !== -1) {
+                        e.preventDefault();
+                        const file = item.getAsFile();
+                        handleImageFile(file);
+                        return;
+                    }
+                }
+            });
+
+            // Drag and drop into editor
+            const dropZone = document.getElementById('editorWorkspace');
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('drop-target-active');
+            });
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('drop-target-active');
+            });
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('drop-target-active');
+                if (e.dataTransfer.files && e.dataTransfer.files.length) {
+                    for (const file of e.dataTransfer.files) {
+                        if (file.type.startsWith('image/')) {
+                            handleImageFile(file);
+                        }
+                    }
+                }
+            });
+
+            // Image Button Picker
+            const fileInput = document.getElementById('imageFileInput');
+            document.getElementById('btnInsertImageFile').addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length) {
+                    handleImageFile(fileInput.files[0]);
+                    fileInput.value = '';
+                }
+            });
+        }
+
+        function getNextPastedImageName(file) {
+            const ext = file.name && file.name.includes('.') ? file.name.split('.').pop().toLowerCase() : 'png';
+            
+            // Collect all existing image names in the editor
+            const used = new Set();
+            for (const img of richCanvas.querySelectorAll('img')) {
+                const fn = img.getAttribute('data-filename') || (img.getAttribute('src') || '').split('/').pop().split('?')[0];
+                if (fn) used.add(fn);
+            }
+            for (const fn of pendingImages.keys()) {
+                used.add(fn);
+            }
+            const mdMatches = rawMarkdown.value.match(/!\[.*?\]\((.*?)\)/g) || [];
+            for (const m of mdMatches) {
+                const s = m.replace(/!\[.*?\]\(/, '').replace(/\)$/, '').trim().split('/').pop().split('?')[0];
+                if (s) used.add(s);
+            }
+
+            // If user dragged a file with a specific custom name (not generic image.png / blob)
+            const isGeneric = !file.name || file.name === 'image.png' || file.name === 'blob' || file.name.startsWith('image.');
+            const base = isGeneric ? 'image' : file.name.substring(0, file.name.lastIndexOf('.')).replace(/\s+/g, '_');
+
+            let num = 1;
+            while (used.has(`${base}-${num}.${ext}`) || (num === 1 && used.has(`${base}.${ext}`))) {
+                num++;
+            }
+            return `${base}-${num}.${ext}`;
+        }
+
+        function handleImageFile(file) {
+            const filename = getNextPastedImageName(file);
+
+            // Save in pending images map
+            pendingImages.set(filename, file);
+
+            // Create object URL for instant preview inside rich canvas
+            const blobUrl = URL.createObjectURL(file);
+
+            if (isRawMode) {
+                // Insert markdown image tag with clean empty alt
+                const tag = `\n![](${filename})\n`;
+                const pos = rawMarkdown.selectionStart;
+                rawMarkdown.value = rawMarkdown.value.slice(0, pos) + tag + rawMarkdown.value.slice(pos);
+            } else {
+                // Insert clean image directly into rich canvas
+                richCanvas.focus();
+                const imgHtml = `<p><img src="${blobUrl}" data-filename="${filename}" alt=""></p><p><br></p>`;
+                document.execCommand('insertHTML', false, imgHtml);
+            }
+
+            footerInfo.innerHTML = `<span class="prompt">&gt;</span> Image added: <b>${filename}</b> (will save to <code>images/${postSlug.value || 'slug'}/${filename}</code>)`;
+        }
+
+        // File System Access API: Connect Folder
+        document.getElementById('btnConnectDir').addEventListener('click', async () => {
+            try {
+                dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+                workspaceBadge.textContent = '📁 WORKSPACE LINKED';
+                workspaceBadge.style.borderColor = 'var(--term-green)';
+                workspaceBadge.style.color = '#fff';
+                workspaceBadge.style.background = 'rgba(0, 255, 13, 0.2)';
+                footerInfo.innerHTML = '<span class="prompt">&gt;</span> Workspace linked! All saves will write directly to disk.';
+                await loadPosts();
+            } catch (err) {
+                if (err.name !== 'AbortError') {
+                    alert('Folder link error: ' + err.message);
+                }
+            }
+        });
+
+        // Save Function
+        async function saveCurrentBlurt() {
+            const title = postTitle.value.trim();
+            const slug = postSlug.value.trim();
+            const date = postDate.value;
+            const isSub = postHierarchy.value === 'sub';
+            const parentSlug = postParent.value;
+            const blurb = postBlurb.value.trim();
+
+            if (!title) {
+                alert('Please enter a title for the blurt.');
+                postTitle.focus();
+                return;
+            }
+            if (!slug) {
+                alert('Please enter a slug.');
+                postSlug.focus();
+                return;
+            }
+
+            // Ensure every image in canvas has a distinct filename before converting to markdown
+            const seenFilenames = new Map();
+            for (const img of richCanvas.querySelectorAll('img')) {
+                let fname = img.getAttribute('data-filename') || (img.getAttribute('src') || '').split('/').pop().split('?')[0];
+                if (!fname || fname.startsWith('blob:') || fname.startsWith('data:')) fname = 'image-1.png';
+
+                if (seenFilenames.has(fname)) {
+                    const ext = fname.includes('.') ? fname.split('.').pop() : 'png';
+                    const base = fname.replace(new RegExp(`\\.${ext}$`), '').replace(/-\d+$/, '');
+                    let count = seenFilenames.get(fname) + 1;
+                    let newName = `${base}-${count}.${ext}`;
+                    while (seenFilenames.has(newName)) {
+                        count++;
+                        newName = `${base}-${count}.${ext}`;
+                    }
+                    seenFilenames.set(fname, count);
+                    seenFilenames.set(newName, 1);
+                    img.setAttribute('data-filename', newName);
+
+                    const src = img.getAttribute('src');
+                    if (src && (src.startsWith('blob:') || src.startsWith('data:'))) {
+                        try {
+                            const blob = await fetch(src).then(r => r.blob());
+                            pendingImages.set(newName, blob);
+                        } catch (_) {}
+                    }
+                } else {
+                    seenFilenames.set(fname, 1);
+                    img.setAttribute('data-filename', fname);
+                }
+            }
+
+            const markdown = getMarkdownFromCanvas();
+
+            // Update posts.json data structure
+            if (isSub) {
+                const parent = postsData.find(p => p.slug === parentSlug);
+                if (!parent) {
+                    alert('Selected parent series not found.');
+                    return;
+                }
+                parent.sub_blurts = parent.sub_blurts || [];
+                const existingIdx = parent.sub_blurts.findIndex(s => s.slug === slug);
+                const subEntry = { slug, title, date };
+                if (existingIdx !== -1) {
+                    parent.sub_blurts[existingIdx] = subEntry;
+                } else {
+                    parent.sub_blurts.push(subEntry);
+                }
+            } else {
+                const existingIdx = postsData.findIndex(p => p.slug === slug);
+                const entry = { slug, title, date };
+                if (blurb) entry.blurb = blurb;
+                if (existingIdx !== -1) {
+                    entry.sub_blurts = postsData[existingIdx].sub_blurts || [];
+                    postsData[existingIdx] = entry;
+                } else {
+                    entry.sub_blurts = [];
+                    postsData.unshift(entry);
+                }
+            }
+
+            // Direct Disk Write if Directory Handle is connected
+            if (dirHandle) {
+                try {
+                    footerInfo.innerHTML = '<span class="prompt">&gt;</span> Writing files to workspace...';
+
+                    // 1. Write posts.json
+                    const postsFile = await dirHandle.getFileHandle('posts.json', { create: true });
+                    const postsWritable = await postsFile.createWritable();
+                    await postsWritable.write(JSON.stringify(postsData, null, 2));
+                    await postsWritable.close();
+
+                    // 2. Write posts/<slug>.md
+                    const postsDir = await dirHandle.getDirectoryHandle('posts', { create: true });
+                    const mdFile = await postsDir.getFileHandle(`${slug}.md`, { create: true });
+                    const mdWritable = await mdFile.createWritable();
+                    await mdWritable.write(markdown);
+                    await mdWritable.close();
+
+                    // 3. Collect any canvas blob images and write to images/<slug>/
+                    for (const img of richCanvas.querySelectorAll('img')) {
+                        const fname = img.getAttribute('data-filename') || (img.getAttribute('src') || '').split('/').pop().split('?')[0];
+                        const src = img.getAttribute('src');
+                        if (fname && src && (src.startsWith('blob:') || src.startsWith('data:')) && !pendingImages.has(fname)) {
+                            try {
+                                const blob = await fetch(src).then(r => r.blob());
+                                pendingImages.set(fname, blob);
+                            } catch (_) {}
+                        }
+                    }
+
+                    if (pendingImages.size > 0) {
+                        const imagesDir = await dirHandle.getDirectoryHandle('images', { create: true });
+                        const postImagesDir = await imagesDir.getDirectoryHandle(slug, { create: true });
+
+                        for (const [imgName, imgBlob] of pendingImages.entries()) {
+                            const imgFile = await postImagesDir.getFileHandle(imgName, { create: true });
+                            const imgWritable = await imgFile.createWritable();
+                            await imgWritable.write(imgBlob);
+                            await imgWritable.close();
+                        }
+                        pendingImages.clear();
+                    }
+
+                    renderSidebar();
+                    populateParentSelect();
+                    footerInfo.innerHTML = `<span class="prompt">&gt;</span> <b>SUCCESS:</b> Saved <code>posts/${slug}.md</code> & <code>posts.json</code> to workspace!`;
+                    flashSaved();
+                    return;
+                } catch (err) {
+                    console.error('Disk save failed:', err);
+                    alert('Disk save failed: ' + err.message + '\nFalling back to export modal.');
+                }
+            }
+
+            // Fallback: Show export dialog
+            showExportModal(slug, markdown);
+        }
+
+        document.getElementById('btnSave').addEventListener('click', saveCurrentBlurt);
+
+        function flashSaved() {
+            const btn = document.getElementById('btnSave');
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<span>✓</span> Saved!';
+            btn.style.borderColor = '#fff';
+            setTimeout(() => {
+                btn.innerHTML = orig;
+                btn.style.borderColor = 'var(--term-green)';
+            }, 1800);
+        }
+
+        // Export Modal Fallback
+        const exportModal = document.getElementById('exportModal');
+        function showExportModal(slug, markdown) {
+            document.getElementById('exportFilePath').textContent = `posts/${slug}.md`;
+            document.getElementById('exportText').value = markdown;
+            exportModal.style.display = 'flex';
+        }
+
+        document.getElementById('btnExport').addEventListener('click', () => {
+            const slug = postSlug.value.trim() || 'blurt';
+            showExportModal(slug, getMarkdownFromCanvas());
+        });
+
+        document.getElementById('btnCloseExport').addEventListener('click', () => {
+            exportModal.style.display = 'none';
+        });
+
+        document.getElementById('btnCopyExport').addEventListener('click', () => {
+            const text = document.getElementById('exportText').value;
+            navigator.clipboard.writeText(text);
+            document.getElementById('btnCopyExport').textContent = 'Copied!';
+            setTimeout(() => document.getElementById('btnCopyExport').textContent = 'Copy to Clipboard', 1800);
+        });
+
+        // Hotkeys (Ctrl+S, Ctrl+B, Ctrl+I, Ctrl+K)
+        function setupHotkeys() {
+            window.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+                    e.preventDefault();
+                    saveCurrentBlurt();
+                }
+            });
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "tech.sval.chaosprep",
+      "sha256_cert_fingerprints": [
+        "8D:45:70:56:07:74:37:CF:B9:B1:F2:E8:B7:3F:2A:B0:EF:2E:04:8A:BB:6D:B0:24:7B:B8:3A:1F:39:23:76:BC"
+      ]
+    }
+  }
+]

@@ -5,198 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>svalordev</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
-
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #000000;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(0, 255, 13, 0.25);
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 255, 13, 0.6);
-        }
-
-        body {
-            font-family: "Fira Code", monospace;
-            font-optical-sizing: auto;
-            font-weight: 400;
-            font-style: normal;
-            color: rgb(0, 255, 13);
-            background-color: black;
-            padding: 24px;
-            max-width: 680px;
-            line-height: 1.6;
-        }
-
-        a {
-            color: rgb(0, 255, 13);
-            text-decoration: underline;
-            text-underline-offset: 3px;
-            transition: all 0.15s ease;
-        }
-
-        a:hover {
-            color: #ffffff;
-            text-shadow: 0 0 8px rgb(0, 255, 13);
-            background-color: rgba(0, 255, 13, 0.12);
-        }
-
-        .ascii-art {
-            font-family: "Fira Code", monospace;
-            font-size: min(9.5px, 1.4vw);
-            line-height: 1.05;
-            white-space: pre;
-            overflow: hidden;
-            margin: 16px 0;
-            color: rgb(0, 255, 13);
-            text-shadow: 0 0 4px rgba(0, 255, 13, 0.35);
-            user-select: none;
-        }
-
-        .social-section {
-            margin: 28px 0;
-        }
-
-        .social-section h3 {
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-        }
-
-        .social-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .social-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .prompt {
-            color: rgba(0, 255, 13, 0.5);
-            user-select: none;
-        }
-
-        .social-label {
-            color: rgba(0, 255, 13, 0.7);
-        }
-
-        .discord-btn {
-            background: rgba(0, 255, 13, 0.05);
-            border: 1px dashed rgba(0, 255, 13, 0.4);
-            color: rgb(0, 255, 13);
-            font-family: inherit;
-            font-size: inherit;
-            padding: 2px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.15s ease;
-        }
-
-        .discord-btn:hover {
-            background: rgba(0, 255, 13, 0.15);
-            border-color: rgb(0, 255, 13);
-            box-shadow: 0 0 8px rgba(0, 255, 13, 0.3);
-        }
-
-        .copy-hint {
-            font-size: 0.75rem;
-            opacity: 0.7;
-        }
-
-        .projects {
-            margin: 28px 0;
-        }
-
-        .projects h3 {
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-        }
-
-        .project-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .project-item {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 4px;
-        }
-
-        .project-meta {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .project-label {
-            color: rgba(0, 255, 13, 0.7);
-        }
-
-        .project-desc {
-            color: rgba(0, 255, 13, 0.75);
-            margin-left: 22px;
-            max-width: 560px;
-            line-height: 1.5;
-        }
-
-        .lastfm-stats {
-            width: 360px;
-            max-width: 100%;
-            height: 180px;
-            border: none;
-            display: block;
-            margin-top: 16px;
-        }
-
-        footer {
-            margin-top: 48px;
-            padding-top: 16px;
-            border-top: 1px dashed rgba(0, 255, 13, 0.25);
-            font-size: 0.85rem;
-            color: rgba(0, 255, 13, 0.6);
-        }
-
-        footer p {
-            margin: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <h1>Hi :3</h1>
-    <p>Hi, I am sval, a 17 year old professional devlarper.</p>
 
-    <br>
+    <nav id="nav-container" style="display: none;"></nav>
 
-    <!-- AMAZE AMAZE AMAZE -->
-    <pre class="ascii-art" id="asciiArt">                    =<+.    ^>~
+    <div id="home-view">
+        <h1>sval.tech</h1>
+        <p>Hi, I am sval, a 17 year old professional devlarper.</p>
+        <br>
+        <!-- grace rocky save stars -->
+        <pre class="ascii-art" id="asciiArt">                    =<+.    ^>~
                    :>)<: :+)]]~
                    =)((==>((<^                                                           ~*:
                   .^][[([}[]).                                                         :*():
@@ -240,90 +61,254 @@
                 +}{##]<]}[=        +])~                                       -[}[<.
                 -<((]}]](<=</pre>
 
-    <div class="social-section">
-        <h3>Social Links:</h3>
-        <ul class="social-list">
-            <li class="social-item">
-                <span class="prompt">&gt;</span>
-                <span class="social-label">github:</span>
-                <a href="https://github.com/svalordev" target="_blank"
-                    rel="noopener noreferrer">github.com/svalordev</a>
-            </li>
-            <li class="social-item">
-                <span class="prompt">&gt;</span>
-                <span class="social-label">twitter:</span>
-                <a href="https://x.com/svalordev" target="_blank" rel="noopener noreferrer">x.com/svalordev</a>
-            </li>
-            <li class="social-item">
-                <span class="prompt">&gt;</span>
-                <span class="social-label">reddit:</span>
-                <a href="https://reddit.com/user/DarthAcademius" target="_blank" rel="noopener noreferrer">u/DarthAcademius</a>
-            </li>
-            <li class="social-item">
-                <span class="prompt">&gt;</span>
-                <span class="social-label">email:</span>
-                <a href="mailto:hello@sval.tech" target="_blank" rel="noopener noreferrer">hello@sval.tech</a>
-            </li>
-            <li class="social-item">
-                <span class="prompt">&gt;</span>
-                <span class="social-label">discord:</span>
-                <button class="discord-btn" id="discordBtn" onclick="copyDiscord()"
-                    title="Click to copy Discord username">
-                    <span>svalordev</span>
-                    <span class="copy-hint" id="discordBadge">[copy]</span>
-                </button>
-            </li>
-        </ul>
+        <!-- Social Links -->
+        <div class="social-section">
+            <h3>Social Links:</h3>
+            <ul class="social-list">
+                <li class="social-item">
+                    <span class="prompt">&gt;</span>
+                    <span class="social-label">github:</span>
+                    <a href="https://github.com/svalordev" target="_blank"
+                        rel="noopener noreferrer">github.com/svalordev</a>
+                </li>
+                <li class="social-item">
+                    <span class="prompt">&gt;</span>
+                    <span class="social-label">twitter:</span>
+                    <a href="https://x.com/svalordev" target="_blank" rel="noopener noreferrer">x.com/svalordev</a>
+                </li>
+                <li class="social-item">
+                    <span class="prompt">&gt;</span>
+                    <span class="social-label">reddit:</span>
+                    <a href="https://reddit.com/user/DarthAcademius" target="_blank"
+                        rel="noopener noreferrer">u/DarthAcademius</a>
+                </li>
+                <li class="social-item">
+                    <span class="prompt">&gt;</span>
+                    <span class="social-label">email:</span>
+                    <a href="mailto:hello@sval.tech" target="_blank" rel="noopener noreferrer">hello@sval.tech</a>
+                </li>
+                <li class="social-item">
+                    <span class="prompt">&gt;</span>
+                    <span class="social-label">discord:</span><!--🫩-->
+                    <button class="discord-btn" id="discordBtn" onclick="copyDiscord()"
+                        title="Click to copy Discord username">
+                        <span>svalordev</span>
+                        <span class="copy-hint" id="discordBadge">[copy]</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Blurts -->
+        <div class="journal-section" id="blurts-section">
+            <span class="prompt">&gt;</span> Loading blurts...
+        </div>
+
+        <!-- Projects -->
+        <div class="projects">
+            <h3>Projects:</h3>
+            <ul class="project-list">
+                <li class="project-item">
+                    <div class="project-meta">
+                        <span class="prompt">&gt;</span>
+                        <span class="project-label">site:</span>
+                        <a href="https://chaosprep.in" target="_blank" rel="noopener noreferrer">chaosprep.in</a>
+                    </div>
+                    <span class="project-desc">exam productivity dashboard and accountability platform with 1k+ daily
+                        users, 9k+ registered users, and a 1k+ member discord community.</span>
+                </li>
+                <li class="project-item">
+                    <div class="project-meta">
+                        <span class="prompt">&gt;</span>
+                        <span class="project-label">site:</span>
+                        <a href="https://sval.tech" target="_blank" rel="noopener noreferrer">sval.tech</a>
+                    </div>
+                    <span class="project-desc">personal site + web experiments</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Music -->
+        <h3>Currently listening to:</h3>
+        <iframe class="lastfm-stats"
+            src="https://lastfm-embed.vercel.app/api/currently-playing?user=svalordev&lang=en&theme=dark&borderSize=0&borderRadius=0&showTitle=false&bgColor=%23000&textColor=%2300ff0d&urlColor=%2300ff0d&scrobbleColor=%2300ff0d"
+            title="Last.fm Currently Playing" scrolling="no" loading="lazy"></iframe>
     </div>
 
-    <div class="projects">
-        <h3>Projects:</h3>
-        <ul class="project-list">
-            <li class="project-item">
-                <div class="project-meta">
-                    <span class="prompt">&gt;</span>
-                    <span class="project-label">site:</span>
-                    <a href="https://chaosprep.in" target="_blank" rel="noopener noreferrer">chaosprep.in</a>
-                </div>
-                <span class="project-desc">exam productivity dashboard and accountability platform with 1k+ daily users, 8k+ registered users, and a 1k+ member discord community.</span>
-            </li>
-            <li class="project-item">
-                <div class="project-meta">
-                    <span class="prompt">&gt;</span>
-                    <span class="project-label">site:</span>
-                    <a href="https://sval.tech" target="_blank" rel="noopener noreferrer">sval.tech</a>
-                </div>
-                <span class="project-desc">personal site + web experiments</span>
-            </li>
-        </ul>
-    </div>
-
-    <h3>What I'm listening to rn:</h3>
-    <iframe class="lastfm-stats"
-        src="https://lastfm-embed.vercel.app/api/currently-playing?user=svalordev&lang=en&theme=dark&borderSize=0&borderRadius=0&showTitle=false&bgColor=%23000&textColor=%2300ff0d&urlColor=%2300ff0d&scrobbleColor=%2300ff0d"
-        title="Last.fm Currently Playing" scrolling="no" loading="lazy"></iframe>
+    <!-- Post Reading View -->
+    <main id="post-view" class="journal-section" style="display: none;">
+        <article id="content"></article>
+    </main>
 
     <footer>
-        <p>&copy; 2026 sval.tech | mrowwwww</p>
+        <p>&copy; 2026 sval.tech</p>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
+        let currentSlug = '';
+        marked.use({
+            walkTokens(token) {
+                if (token.type === 'image' && token.href && !/^(https?:\/\/|\/|data:|images\/)/i.test(token.href)) {
+                    token.href = `images/${encodeURIComponent(currentSlug)}/${token.href.replace(/^\.\//, '')}`;
+                }
+            }
+        });
+
+        const renderItem = (p, showBlurb = false) => `
+            <li class="entry-item">
+                <div class="entry-header">
+                    <span class="entry-title">
+                        <span class="prompt">&gt;</span>
+                        <a href="?post=${encodeURIComponent(p.slug)}">${p.title}</a>
+                    </span>
+                    <span class="entry-date">${p.date}</span>
+                </div>
+                ${showBlurb && p.blurb ? `<span class="entry-desc">${p.blurb}</span>` : ''}
+            </li>`;
+
+        const renderSubItem = (sub, isLast) => `
+            <li class="sub-entry-item">
+                <div class="sub-entry-header">
+                    <span class="entry-title">
+                        <span class="tree-branch">${isLast ? '└──' : '├──'}</span>
+                        <span class="prompt">&gt;</span>
+                        <a href="?post=${encodeURIComponent(sub.slug)}">${sub.title}</a>
+                    </span>
+                    <span class="entry-date">${sub.date}</span>
+                </div>
+            </li>`;
+
+        async function initJournal() {
+            const content = document.getElementById('content');
+            const blurtsSection = document.getElementById('blurts-section');
+            const postView = document.getElementById('post-view');
+            const nav = document.getElementById('nav-container');
+            const homeView = document.getElementById('home-view');
+            const postSlug = new URLSearchParams(window.location.search).get('post');
+
+            if (!postSlug) {
+                document.title = 'svalordev';
+                homeView.style.display = 'block';
+                postView.style.display = 'none';
+                nav.style.display = 'none';
+
+                try {
+                    const res = await fetch('posts.json');
+                    const posts = await res.json();
+
+                    blurtsSection.innerHTML = `<h3>Blurts:</h3><ul class="entry-list">${posts.map(p => {
+                        let html = renderItem(p, true);
+                        if (p.sub_blurts?.length) {
+                            html += `<ul class="sub-entry-list">${p.sub_blurts.map((s, i) =>
+                                renderSubItem(s, i === p.sub_blurts.length - 1)
+                            ).join('')}</ul>`;
+                        }
+                        return html;
+                    }).join('')}</ul>`;
+                } catch {
+                    blurtsSection.innerHTML = '<h3>Blurts:</h3><p style="color: var(--term-green-muted);">[no blurts yet / index offline]</p>';
+                }
+                return;
+            }
+
+            homeView.style.display = 'none';
+            postView.style.display = 'block';
+            nav.style.display = 'block';
+            window.scrollTo(0, 0);
+
+            try {
+                const posts = await (await fetch('posts.json')).json();
+                let post = null, parent = null;
+
+                for (const p of posts) {
+                    if (p.slug === postSlug) { post = p; break; }
+                    const sub = p.sub_blurts?.find(s => s.slug === postSlug);
+                    if (sub) { post = sub; parent = p; break; }
+                }
+
+                if (!post) throw new Error('Not found');
+
+                currentSlug = post.slug;
+                document.title = parent ? `${post.title} | ${parent.title} | svalordev` : `${post.title} | svalordev`;
+                nav.innerHTML = parent
+                    ? `<a href="${window.location.pathname}">[← cd /]</a> <span style="color: var(--term-green-muted);">/</span> <a href="?post=${encodeURIComponent(parent.slug)}">[← ${parent.title}]</a>`
+                    : `<a href="${window.location.pathname}">[← cd /]</a>`;
+
+                const mdRes = await fetch(`posts/${encodeURIComponent(post.slug)}.md`);
+                const mdText = mdRes.ok ? await mdRes.text() : `# ${post.title}\n\n${post.blurb || ''}`;
+
+                let bodyHtml = marked.parse(mdText);
+                if (parent) {
+                    bodyHtml = `<div class="series-badge"><span class="prompt">&gt;</span> series: <a href="?post=${encodeURIComponent(parent.slug)}">${parent.title}</a></div>` + bodyHtml;
+                }
+
+                // Sibling sub-blurts if viewing a sub-blurt
+                if (parent) {
+                    const siblings = parent.sub_blurts.filter(s => s.slug !== post.slug);
+                    if (siblings.length) {
+                        bodyHtml += `
+                            <section class="sub-blurts-section">
+                                <hr>
+                                <h3>Other blurts in ${parent.title}:</h3>
+                                <ul class="sub-entry-list">${siblings.map((s, i) =>
+                            renderSubItem(s, i === siblings.length - 1)
+                        ).join('')}</ul>
+                            </section>`;
+                    }
+                }
+
+                // Child sub-blurts if viewing a main blurt
+                if (post.sub_blurts?.length) {
+                    bodyHtml += `
+                        <section class="sub-blurts-section">
+                            <hr>
+                            <h3>Sub-blurts in this series (${post.sub_blurts.length}):</h3>
+                            <ul class="sub-entry-list">${post.sub_blurts.map((s, i) =>
+                        renderSubItem(s, i === post.sub_blurts.length - 1)
+                    ).join('')}</ul>
+                        </section>`;
+                }
+
+                // Other main blurts
+                const otherMains = posts.filter(p => parent ? p.slug !== parent.slug : p.slug !== post.slug);
+                if (otherMains.length) {
+                    bodyHtml += `
+                        <section class="other-posts-section">
+                            <hr>
+                            <h3>Other Blurts:</h3>
+                            <ul class="entry-list">${otherMains.map(p => renderItem(p)).join('')}</ul>
+                        </section>`;
+                }
+
+                content.innerHTML = bodyHtml;
+
+                // Relative <img> resolution for inline HTML
+                content.querySelectorAll('img').forEach(img => {
+                    const src = img.getAttribute('src');
+                    if (src && !/^(https?:\/\/|\/|data:|images\/)/i.test(src)) {
+                        img.src = `images/${encodeURIComponent(currentSlug)}/${src.replace(/^\.\//, '')}`;
+                    }
+                });
+
+            } catch {
+                content.innerHTML = '<h2>404</h2><p>blurt not found or failed to load.</p>';
+            }
+        }
+
+        window.addEventListener('popstate', initJournal);
+        initJournal();
+
         function copyDiscord() {
             navigator.clipboard.writeText('svalordev').then(() => {
                 const badge = document.getElementById('discordBadge');
                 if (badge) {
                     badge.textContent = '[copied!]';
-                    setTimeout(() => {
-                        badge.textContent = '[copy]';
-                    }, 2000);
+                    setTimeout(() => badge.textContent = '[copy]', 2000);
                 }
-            }).catch(() => {
-                prompt('Discord username:', 'svalordev');
-            });
+            }).catch(() => prompt('Discord username:', 'svalordev'));
         }
     </script>
-
-    <!-- Who's looking at the source like a good boy? -->
 </body>
 
 </html>
