@@ -1,5 +1,12 @@
 [
   {
+    "slug": "nand2tetris",
+    "title": "nand2tetris",
+    "date": "2026-10-27",
+    "blurb": "building a computer from first principles, logic gates to os.",
+    "sub_blurts": []
+  },
+  {
     "slug": "2026-10-20-hello-world",
     "title": "Hello World",
     "date": "2026-10-27",
